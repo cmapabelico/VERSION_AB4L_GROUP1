@@ -1,11 +1,6 @@
 <?php
 
 	session_start();
-	
-	if($_SESSION["login"]!=1){
-		header("Location: login.php");
-		exit;
-	}
 
 ?>
 
@@ -17,9 +12,20 @@
 
 <body>
 	
-	Hello <?php echo $_SESSION["id"]; ?>
+	<?php
+		if(!empty($_SESSION["id"])) echo "Hello ".$_SESSION["id"];
+		else echo "Hello guest";
+	?> 
+	
 	<br/><br/><br/>
-	<a href="logout.php">Log out</a>
+	
+	<?php
+		if(!empty($_SESSION["id"])) echo '<a href="logout.php">Log out</a>';
+		else{
+			echo '<a href="login.php">Log in</a><br/>';
+			echo '<a href="register.php">Register</a><br/>';
+		}
+	?>
 	
 </body>
 
