@@ -3,7 +3,7 @@
 	session_start();
 
 	//Connect to database
-	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
+	$dbconn = pg_connect("host=localhost port=5432 dbname=tbp user=postgres password=secret");
 	$error = '';
 	
 	//LOG IN
