@@ -29,9 +29,8 @@ div.nav a:hover{
 
 div.content{
 	border: none;
-	width: 800px;
+	width: 700px;
 	margin: 5px;
-
 }
 
 div.user{
@@ -71,4 +70,11 @@ table.prodtable{
 table.prodtable td{
 	border: 1px solid black;
 	margin: 2px;
+}
+
+table.menutable td{
+	border: 1px solid black;
+	padding: 10px;
+	width: 400px;
+	vertical-align: top;
 }
