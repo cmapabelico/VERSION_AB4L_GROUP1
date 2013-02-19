@@ -1,10 +1,17 @@
 <?PHP
+	
+	session_start();
+
 	require_once("./include/membersite_config.php");
+	
+	if($_SESSION["login"]==1){
+		header("Location: home.php");
+	}
 	
 	if(isset($_POST['submitted']))
 	{
 		
-		$db = pg_connect("host=localhost port=5432 dbname=tbp user=postgres password=secret");
+		$db = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
 		$email = pg_escape_string($_POST['email']);
 		$password = pg_escape_string($_POST['password']);
@@ -47,12 +54,51 @@
 		   <link rel="STYLESHEET" type="text/css" href="style/fg_membersite.css" />
 		<script type='text/javascript' src='scripts/gen_validatorv31.js'></script>
 		<link rel="stylesheet" type="text/css" href="style/pwdwidget.css"/>
+		<link rel="stylesheet" type="text/css" href="style.css"/>
 		<script src="scripts/pwdwidget.js" type="text/javascript"></script> 
 	</head>
 
 	
 	<body>
-		<div id="fg_membersite">
+	
+	<center>
+	<div class="body">
+
+		<div class="nav">
+			<img src="images/logo.png" width="500"/><br/><br/>
+			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="contact.php">Contact Us</a>
+		</div>
+	
+		<div class="content">
+			<div class="user">
+				
+				<?php
+				if($_SESSION["id"]!=null){
+					$query = "select * from member where email='".$_SESSION["id"]."';";
+					$result = pg_query($dbconn, $query);
+					$row = pg_fetch_row($result);	
+				?>
+					You are logged in as <?php echo $row[2]." ".$row[3]; ?> | 
+					<a href="edit.php">Edit</a> | 
+					<?php
+						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Products</a> | ';
+						else echo '<a href="tray.php">Tray</a> | ';
+					?>
+					<a href="logout.php">Log out</a><br/>
+				<?php }
+					else{
+						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
+					}
+				?>
+				
+			</div>
+			
+			<br/><br/>
+			
+			<div id="fg_membersite">
 			<form id="register" action="register.php" method="post" accept-charset='UTF-8'>
 				<fieldset>
 				<legend>REGISTER</legend>
@@ -108,7 +154,7 @@
 				</div>
 				<!--floor-->
 				<div class="container">
-					<label for="floor">Floor number:</label><br/>
+					<label for="floor">Floor number/Department/House number:</label><br/>
 					<input type="text" name="floor" id="floor" maxlength="2"/><br/>
 					<span id='register_floor_errorloc' class='error'></span>
 				</div>
@@ -188,34 +234,35 @@
 				</fieldset>
 			</form>
 			
-			
-		<script type='text/javascript'>
-// <![CDATA[
-    var pwdwidget = new PasswordWidget('thepwddiv','password');
-    pwdwidget.MakePWDWidget();
-    
-    var frmvalidator  = new Validator("register");
-    frmvalidator.EnableOnPageErrorDisplay();
-    frmvalidator.EnableMsgsTogether();
-    frmvalidator.addValidation("fname","req","Please provide your first name");
-	frmvalidator.addValidation("lname","req","Please provide your last name");
-	frmvalidator.addValidation("contact","req","Please provide your contact number");
-	frmvalidator.addValidation("contact","num","Please enter valid contact");
-	frmvalidator.addValidation("contact","cont","Please enter 11 digits");
-	frmvalidator.addValidation("bday","req","Please provide your birthday");
-	frmvalidator.addValidation("gender","req","Please choose your gender");
-	frmvalidator.addValidation("street","req","Enter your street name");
-	frmvalidator.addValidation("area","req","Enter your area name");
-	frmvalidator.addValidation("city","req","Enter your city");
-	frmvalidator.addValidation("lmark","req","Enter a nearby landmark");
+		</div>
 	
-    frmvalidator.addValidation("email","req","Please provide your email address");
-
-    frmvalidator.addValidation("email","email","Please provide a valid email address");
-    frmvalidator.addValidation("password","req","Please provide a password");
-
-// ]]>
-</script>
+	</div>
+	</center>
+			
+	<script type='text/javascript'>
+	// <![CDATA[
+		var pwdwidget = new PasswordWidget('thepwddiv','password');
+		pwdwidget.MakePWDWidget();
+		
+		var frmvalidator  = new Validator("register");
+		frmvalidator.EnableOnPageErrorDisplay();
+		frmvalidator.EnableMsgsTogether();
+		frmvalidator.addValidation("fname","req","Please provide your first name");
+		frmvalidator.addValidation("lname","req","Please provide your last name");
+		frmvalidator.addValidation("contact","req","Please provide your contact number");
+		frmvalidator.addValidation("contact","num","Please enter valid contact");
+		frmvalidator.addValidation("contact","cont","Please enter 11 digits");
+		frmvalidator.addValidation("bday","req","Please provide your birthday");
+		frmvalidator.addValidation("gender","req","Please choose your gender");
+		frmvalidator.addValidation("street","req","Enter your street name");
+		frmvalidator.addValidation("area","req","Enter your area name");
+		frmvalidator.addValidation("city","req","Enter your city");
+		frmvalidator.addValidation("lmark","req","Enter a nearby landmark");
+		frmvalidator.addValidation("email","req","Please provide your email address");
+		frmvalidator.addValidation("email","email","Please provide a valid email address");
+		frmvalidator.addValidation("password","req","Please provide a password");
+	// ]]>
+	</script>
 
 
 </body>

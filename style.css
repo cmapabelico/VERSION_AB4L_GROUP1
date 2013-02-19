@@ -1,0 +1,74 @@
+*{
+	font-family: Tahoma;
+	font-size: 11px;
+	color: #000000;
+}
+
+div.body{
+	width: 1000px;
+	min-height: 600px;
+	border: none;
+}
+
+div.nav{
+	border-bottom: 1px dotted black;
+	width: 1000px;
+	height: 230px;
+}
+
+div.nav a{
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+div.nav a:hover{
+	color: #f7921c;
+}
+
+div.content{
+	border: none;
+	width: 800px;
+	margin: 5px;
+
+}
+
+div.user{
+	text-align: right;
+}
+
+div.flash{
+	width: 500px;
+	height: 300px;
+	border: 1px solid black;
+}
+
+a:link, a:active, a:visited{
+	text-decoration: none;
+}
+
+table.editformtable td{
+	width: 300px;
+	border: none;
+}
+
+table.editformtable td.title{
+	width: 120px;
+	text-align: right;
+	padding-right: 5px;
+	font-weight: bold;
+}
+
+table.editformtable input{
+	width: 300px;
+}
+
+table.prodtable{
+	width: 300px;
+}
+
+table.prodtable td{
+	border: 1px solid black;
+	margin: 2px;
+}
