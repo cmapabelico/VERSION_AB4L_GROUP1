@@ -14,7 +14,7 @@
 		$db = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
 		$email = pg_escape_string($_POST['email']);
-		$password = pg_escape_string($_POST['password']);
+		$password = md5(pg_escape_string($_POST['password']));
 		$fname = pg_escape_string($_POST['fname']);	
 		$lname = pg_escape_string($_POST['lname']);
 		$contact = pg_escape_string($_POST['contact']);
