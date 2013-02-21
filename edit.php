@@ -2,12 +2,15 @@
 
 	session_start();
 
+	//If there is no logged in user, redirect to home page
 	if($_SESSION["login"]!=1){
 		header("Location:home.php");
 	}
 	
+	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 	
+	//Get user details from database
 	$query = "select * from member where email='".$_SESSION["id"]."'";
 	$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 	$row = pg_fetch_row($result);
@@ -35,6 +38,7 @@
 	
 	$update = false;
 	
+	//When edit form is submitted
 	if(isset($_POST["submit"])){
 	
 		$fname = $_POST["fname"];
@@ -53,10 +57,12 @@
 		$city2 = $_POST["city2"];
 		$landmark2 = $_POST["landmark2"];
 		
+		//Form validation
 		if(empty($fname) || empty($lname) || empty($contact) || empty($floor) || empty($street) || empty($area) || empty($city)){
 			$update = false;
 		}
 		
+		//If form is valid, update database
 		if($update){
 			$query= "UPDATE member SET fname='$fname', lname='$lname', contact='$contact', floor='$floor', bldg='$bldg', street='$street', area='$area', city='$city', landmark='$landmark', floor2='$floor2', bldg2='$bldg2', street2='$street2', area2='$area2', city2='$city2', landmark2='$landmark2' where email='$email';";
 			pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
@@ -88,7 +94,6 @@
 	
 		<div class="content">
 			<div class="user">
-				
 				<?php
 				if($_SESSION["id"]!=null){
 					$query = "select * from member where email='".$_SESSION["id"]."';";
@@ -107,7 +112,6 @@
 						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
-				
 			</div>
 			
 			<br/><br/>
@@ -156,8 +160,7 @@
 	
 	</div>
 	</center>	
-	
-	
+
 </body>
 
 </html>

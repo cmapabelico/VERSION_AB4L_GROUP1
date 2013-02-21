@@ -15,6 +15,7 @@
 		$email = $_POST["loginemail"];
 		$password = md5($_POST["loginpword"]);
 		
+		//Validation
 		if(empty($email)){
 			$error = "* Invalid login";
 		}
@@ -24,6 +25,7 @@
 			$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 			$row = pg_fetch_row($result);
 		
+			//Validation
 			if($email==$row[0] and $password==$row[1]){
 				$_SESSION["login"] = 1;
 				$_SESSION["id"] = $email;

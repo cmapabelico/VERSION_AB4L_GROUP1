@@ -2,22 +2,34 @@
 
 	session_start();
 	
+	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 	$update = false;
 	$showeditform = false;
 	
+	//If user is not admin, redirect to home page
+	if($_SESSION["id"]!='theburgerproject@gmail.com')){
+		header("Location:home.php");
+	}
+	
+	//Add product form
 	if(isset($_POST["addsubmit"])){
 	
 		$name = $_POST["name"];
 		$price = $_POST["price"];
 		$type = $_POST["type"];
 	
+		//Form validation
+	
+	
+		//Add product to database
 		$query = "insert into product values('$name', $price, '$type');";
 		pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 		$update = true;
 	
 	}
-	
+
+	//Edit product form
 	if(isset($_POST["editsubmit"])){
 	
 		$pname = $_POST["pname"];
@@ -25,6 +37,10 @@
 		$ptype = $_POST["ptype"];
 		$p = $_POST["oldname"];
 	
+		//Form validation
+		
+		
+		//Update product info in database
 		$query = "update product set pname='$pname', price=$pprice, ptype='$ptype' where pname='$p';";
 		pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 		$update = true;
@@ -32,15 +48,15 @@
 	}
 	
 	$query = 'select * from product';
-	$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
-		
+	$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());		
 	while($row=pg_fetch_row($result)){
+		//Delete product
 		if(isset($_POST["delete$row[0]"])){
 			$q = "delete from product where pname='".$row[0]."'";
 			$r = pg_query($dbconn, $q) or die('Query failed: ' . pg_last_error());
 			$update = true;
 		}
-		
+		//Check which product to edit
 		if(isset($_POST["edit$row[0]"])){
 			$showeditform = true;
 			$q = "select * from product where pname='$row[0]'";
@@ -50,7 +66,6 @@
 			$pprice = $row[1];
 			$ptype = $row[2];
 		}
-		
 	}
 	
 	pg_free_result($result);
@@ -78,8 +93,7 @@
 		</div>
 	
 		<div class="content">
-			<div class="user">
-				
+			<div class="user">			
 				<?php
 				if($_SESSION["id"]!=null){
 					$query = "select * from member where email='".$_SESSION["id"]."';";
@@ -98,13 +112,13 @@
 						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
-				
 			</div>
 			
 			<br/><br/><br/>
 			
 			<?php if($update) echo 'Products list updated<br/><br/>'; ?>	
 			
+			<!--ADD PRODUCT FORM-->
 			Add Product<br/><br/>
 			<table class="addprodtable">
 			<form name="addform" action="admin.php" method="POST">
@@ -117,9 +131,9 @@
 			
 			<br/><br/><br/>
 			
+			<!--EDIT PRODUCT FORM-->
 			<?php if($showeditform){ ?>
 				Edit Product<br/>
-				
 				<table class="addprodtable">
 				<form name="editform" action="admin.php" method="POST">
 					<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="pname" placeholder="Name" <?php if($pname!=null) echo 'value="'.$pname.'"'; ?>/></td></tr>
@@ -133,15 +147,15 @@
 				<br/><br/><br/>
 			<?php } ?>
 			
+			<!--PRODUCTS LIST-->
 			Products List<br/><br/>
 			
 			<table class="prodtable">
 			<form name="prodform" action="admin.php" method="POST">
 			<?php
-			
-				$query = 'select * from product';
+				//Print all products from database
+				$query = 'select * from product order by ptype';
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
-		
 				while($row=pg_fetch_row($result)){
 					echo '<tr>';
 					echo '<td><b>'.$row[0].'</b><br/>Php '.$row[1].'<br/>'.$row[2].'</td>';
@@ -149,9 +163,7 @@
 					echo '<input type="submit" name="delete'.$row[0].'" value="Delete"/></td>';
 					echo '</tr>';
 				}
-				
 				pg_free_result($result);
-		
 			?>
 			</form>
 			</table>

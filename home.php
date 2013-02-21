@@ -5,6 +5,7 @@
 	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
+	//Check if user is logged in
 	if($_SESSION["login"]!=1) $_SESSION["id"]=null;
 	
 ?>
@@ -30,7 +31,6 @@
 	
 		<div class="content">
 			<div class="user">
-				
 				<?php
 				if($_SESSION["id"]!=null){
 					$query = "select * from member where email='".$_SESSION["id"]."';";
@@ -49,9 +49,12 @@
 						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
-				
-				
 			</div>
+			
+			<!--content starts here-->
+			
+			
+			
 		</div>
 	
 	</div>
