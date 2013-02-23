@@ -27,8 +27,10 @@
 		
 			//Validation
 			if($email==$row[0] and $password==$row[1]){
-				$_SESSION["login"] = 1;
-				$_SESSION["id"] = $email;
+				$_SESSION["login"] = 1; //log in status
+				$_SESSION["id"] = $email; //user id
+				$_SESSION["tray"] = array(); //user tray
+				$_SESSION["traycontents"] = 0; //number of items in tray
 				header("Location: home.php");
 			}
 			else{

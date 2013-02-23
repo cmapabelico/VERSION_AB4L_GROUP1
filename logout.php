@@ -5,6 +5,7 @@
 	
 	$_SESSION["login"] = 0;
 	$_SESSION["id"] = null;
+	$_SESSION["traycontents"] = 0;
 	
 	header("Location: index.php");
 	exit;

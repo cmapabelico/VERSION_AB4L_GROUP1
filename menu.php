@@ -1,8 +1,85 @@
 <?php
 
+	include("prodclass.php");
 	session_start();
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
-
+	
+	//ORDER
+	if(isset($_POST["submit"])){
+	
+		$premade = $_POST["premade"];
+		$sides = $_POST["sides"];
+		$milkshake = $_POST["milkshake"];
+		$beverage = $_POST["beverage"];
+		
+		if(count($premade) > 0){
+			for($i=0;$i < count($premade);$i++){
+				//get item details
+				$q = "select * from product where pname='".$premade[$i]."';";
+				$r = pg_query($dbconn, $q);
+				$row = pg_fetch_row($r);
+				//add to tray
+				$p = new Product($row[0], $row[1], 1);
+				array_push($_SESSION["tray"], $p);
+				$_SESSION["traycontents"]++;
+			}
+		}
+		
+		if(count($sides) > 0){
+			for($i=0;$i < count($sides);$i++){
+				//get item details
+				$q = "select * from product where pname='".$sides[$i]."';";
+				$r = pg_query($dbconn, $q);
+				$row = pg_fetch_row($r);
+				//add to tray
+				$p = new Product($row[0], $row[1], 1);
+				array_push($_SESSION["tray"], $p);
+				$_SESSION["traycontents"]++;
+			}
+		}
+		
+		if(count($milkshake) > 0){
+			for($i=0;$i < count($milkshake);$i++){
+				//get item details
+				$q = "select * from product where pname='".$milkshake[$i]."';";
+				$r = pg_query($dbconn, $q);
+				$row = pg_fetch_row($r);
+				//add to tray
+				$p = new Product($row[0], $row[1], 1);
+				array_push($_SESSION["tray"], $p);
+				$_SESSION["traycontents"]++;
+			}
+		}
+		
+		if(count($beverage) > 0){
+			for($i=0;$i < count($beverage);$i++){
+				//get item details
+				$q = "select * from product where pname='".$beverage[$i]."';";
+				$r = pg_query($dbconn, $q);
+				$row = pg_fetch_row($r);
+				//add to tray
+				$p = new Product($row[0], $row[1], 1);
+				array_push($_SESSION["tray"], $p);
+				$_SESSION["traycontents"]++;
+			}
+		}
+	
+	}
+	
+	
+	//CREATE CUSTOM BURGER
+	if(isset($_POST["create"])){
+	
+		$brgr = $_POST["brgr"];
+		if(empty($brgr)) echo "No brgr selected";
+		else{
+			$n = count($brgr);
+			for($i=0;$i<$n;$i++)
+				echo "$brgr[$i] <br/>";
+		}
+		
+	}
+	
 ?>
 <html>
 
@@ -62,7 +139,7 @@
 						$query = "select * from product where ptype='brgr'";
 						$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 						while($row=pg_fetch_row($result)){
-							echo '<input type="checkbox" name="brgr" value="'.$row[0].'"/> '.$row[0].'<br/>';
+							echo '<input type="checkbox" name="brgr[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 						}
 					?>
 					
@@ -138,7 +215,7 @@
 						$query = "select * from product where ptype='premade'";
 						$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 						while($row=pg_fetch_row($result)){
-							echo '<input type="checkbox" name="premade" value="'.$row[0].'"/> '.$row[0].'<br/>';
+							echo '<input type="checkbox" name="premade[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 						}
 					?>
 					
@@ -149,7 +226,7 @@
 						$query = "select * from product where ptype='sides'";
 						$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 						while($row=pg_fetch_row($result)){
-							echo '<input type="checkbox" name="sides" value="'.$row[0].'"/> '.$row[0].'<br/>';
+							echo '<input type="checkbox" name="sides[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 						}
 					?>
 					
@@ -160,7 +237,7 @@
 						$query = "select * from product where ptype='milkshake'";
 						$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 						while($row=pg_fetch_row($result)){
-							echo '<input type="checkbox" name="milkshake" value="'.$row[0].'"/> '.$row[0].'<br/>';
+							echo '<input type="checkbox" name="milkshake[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 						}
 					?>
 					
@@ -171,7 +248,7 @@
 						$query = "select * from product where ptype='beverage'";
 						$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 						while($row=pg_fetch_row($result)){
-							echo '<input type="checkbox" name="beverage" value="'.$row[0].'"/> '.$row[0].'<br/>';
+							echo '<input type="checkbox" name="beverage[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 						}
 					?>
 				
