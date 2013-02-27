@@ -120,6 +120,10 @@
 							<td><?php  echo $_SESSION["subtotal"]; ?></td>
 						</tr>
 					</table>
+					
+					<br/>
+					
+					<a href="checkout.php">Checkout</a>
 			
 			<?php		
 				}
