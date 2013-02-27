@@ -41,7 +41,7 @@
 					<a href="edit.php">Edit</a> | 
 					<?php
 						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Products</a> | ';
-						else echo '<a href="tray.php">Tray</a> | ';
+						else echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].')</a> | ';
 					?>
 					<a href="logout.php">Log out</a><br/>
 				<?php }

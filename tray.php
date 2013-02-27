@@ -4,6 +4,35 @@
 	session_start();
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
+	//UPDATE QUANTITY
+	for($i=0;$i<count($_SESSION["tray"]);$i++){
+		if(isset($_POST["update$i"])){
+			$newqty = $_POST["quantity$i"];
+			$prevqty = $_POST["prevquantity$i"];
+			$price = $_POST["prodprice$i"];
+			if($newqty>0){
+				//Set new quantity
+				$_SESSION["tray"][$i]->set_qty($newqty);
+				//Update number of tray contents
+				$_SESSION["traycontents"]-=$prevqty;
+				$_SESSION["traycontents"]+=$newqty;
+				//Update subtotal
+				$_SESSION["subtotal"]-=($prevqty * $price);
+				$_SESSION["subtotal"]+=($newqty * $price);
+			}
+			else if($newqty==0){	
+				//Remove item from tray
+				unset($_SESSION["tray"][$i]);
+				//Update indices
+				$_SESSION["tray"] = array_values($_SESSION["tray"]);
+				//Update number of items in tray
+				$_SESSION["traycontents"]-=$prevqty;
+				//Update subtotal
+				$_SESSION["subtotal"]-=($prevqty * $price);
+			}
+		}
+	}
+	
 ?>
 <html>
 
@@ -38,7 +67,7 @@
 					<a href="edit.php">Edit</a> | 
 					<?php
 						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Products</a> | ';
-						else echo '<a href="tray.php">Tray</a> | ';
+						else echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].')</a> | ';
 					?>
 					<a href="logout.php">Log out</a><br/>
 				<?php }
@@ -53,17 +82,43 @@
 			
 			<?php if($_SESSION["traycontents"]>0){ ?>
 				
-					<table>
-					<tr><td>Name</td><td>Quantity</td><td>Price</td></tr>
+					<table class="traytable" cellspacing="0" cellpadding="0">
+					<form name="form" action="tray.php" method="post">
+						
+						<tr class="th">
+							<td>Product Name</td>
+							<td>Quantity</td>
+							<td>Price</td>
+						</tr>
+					
 					<?php
-						for($i=0;$i<count($_SESSION["tray"]);$i++){
-							echo "<tr>";
-							echo "<td>".$_SESSION["tray"][$i]->get_name()."</td>";
-							echo "<td>".$_SESSION["tray"][$i]->get_qty()."</td>";
-							echo "<td>".$_SESSION["tray"][$i]->get_price()."</td>";
-							echo "</tr>";
+						$subtotal = 0;
+						//Print tray items
+						$n = count($_SESSION["tray"]);
+						for($i=0;$i<$n;$i++){
+					?>
+					
+						<tr>
+							<td><?php echo $_SESSION["tray"][$i]->name; ?></td>
+							<td>
+								<input type="number" name="quantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/> 
+								<input type="hidden" name="prevquantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/>
+								<input type="hidden" name="prodprice<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->price; ?>"/>
+								<input type="submit" name="update<?php echo $i; ?>" value="&#10003;"/>
+							</td>
+							<td><?php echo $_SESSION["tray"][$i]->price * $_SESSION["tray"][$i]->qty; ?></td>
+						</tr>
+						
+					<?php
 						}
-					?>		
+					?>
+					
+						<!-- Subtotal -->
+						<tr class="th">
+							<td id="empty"></td>
+							<td>Subtotal</td>
+							<td><?php  echo $_SESSION["subtotal"]; ?></td>
+						</tr>
 					</table>
 			
 			<?php		

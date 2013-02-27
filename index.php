@@ -31,6 +31,7 @@
 				$_SESSION["id"] = $email; //user id
 				$_SESSION["tray"] = array(); //user tray
 				$_SESSION["traycontents"] = 0; //number of items in tray
+				$_SESSION["subtotal"] = 0; //subtotal of ordered items
 				header("Location: home.php");
 			}
 			else{
