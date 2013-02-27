@@ -21,30 +21,44 @@
 	$price = 0;
 	
 	if(isset($_POST["submit1"])){
-		$brgr = $_POST["brgr"];
 		
-		$q = "select * from product where pname='".$brgr."';";
-		$r = pg_query($dbconn, $q);
-		$row = pg_fetch_row($r);
-		$price += $row[1];
-		
-		$showform1 = false;
-		$showform2 = true;
+		if(isset($_POST["brgr"])){
+			$brgr = $_POST["brgr"];
+			
+			$q = "select * from product where pname='".$brgr."';";
+			$r = pg_query($dbconn, $q);
+			$row = pg_fetch_row($r);
+			$price += $row[1];
+			
+			$showform1 = false;
+			$showform2 = true;
+		}
+		else{
+			$showform1 = true;
+		}
+
 	}
 	
 	if(isset($_POST["submit2"])){
 		$price = $_POST["price"];
 		$brgr = $_POST["brgr"];
-		$bun = $_POST["bun"];
 		
-		$q = "select * from product where pname='".$bun."';";
-		$r = pg_query($dbconn, $q);
-		$row = pg_fetch_row($r);
-		$price += $row[1];
+		if(isset($_POST["bun"])){
+			$bun = $_POST["bun"];
+			
+			$q = "select * from product where pname='".$bun."';";
+			$r = pg_query($dbconn, $q);
+			$row = pg_fetch_row($r);
+			$price += $row[1];
 
-		$showform1 = false;
-		$showform2 = false;
-		$showform3 = true;
+			$showform1 = false;
+			$showform2 = false;
+			$showform3 = true;
+		}
+		else{
+			$showform1 = false;
+			$showform2 = true;
+		}
 	}
 	
 	if(isset($_POST["submit3"])){

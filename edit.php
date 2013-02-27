@@ -61,6 +61,9 @@
 		if(empty($fname) || empty($lname) || empty($contact) || empty($floor) || empty($street) || empty($area) || empty($city)){
 			$update = false;
 		}
+		else{
+			$update = true;
+		}
 		
 		//If form is valid, update database
 		if($update){
