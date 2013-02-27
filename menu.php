@@ -76,6 +76,7 @@
 			}
 		}
 	
+		header("Location:tray.php");
 	}
 	
 ?>

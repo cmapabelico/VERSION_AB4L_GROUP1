@@ -101,7 +101,7 @@
 						<tr>
 							<td><?php echo $_SESSION["tray"][$i]->name; ?></td>
 							<td>
-								<input type="number" name="quantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/> 
+								<input type="number" min="0" name="quantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/> 
 								<input type="hidden" name="prevquantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/>
 								<input type="hidden" name="prodprice<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->price; ?>"/>
 								<input type="submit" name="update<?php echo $i; ?>" value="&#10003;"/>

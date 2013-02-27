@@ -173,7 +173,7 @@
 			</table>
 			
 			<form name="checkoutform" action="checkout.php" method="POST">
-					Prepare change for <input type="number" name="payment" value="<?php echo $payment; ?>"/> 
+					Prepare change for <input type="number" min="0" name="payment" value="<?php echo $payment; ?>"/> 
 					<input type="submit" name="submit1" value="Submit"/><br/>
 					<?php if($error!='') echo $error; ?>
 			</form>
