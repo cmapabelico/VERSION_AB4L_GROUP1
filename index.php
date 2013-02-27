@@ -68,9 +68,9 @@
 			  </ol>
 			  <!-- Carousel items -->
 			  <div class="carousel-inner">
-				<div class="active item"><img src="http://www.yadig.com/uploads/biz-logo/burger_ph_alb_091020114032.jpg" alt></div>
-				<div class="item"><img src="http://upload.wikimedia.org/wikipedia/commons/9/91/Burger_King_Whopper_Combo.jpg" alt></div>
-				<div class="item"><img src="http://images4.fanpop.com/image/photos/23800000/BK-burger-king-23892437-263-336.jpg" alt></div>
+				<div class="active item"><img src="http://farm5.static.flickr.com/4137/4892659065_588f2bc841.jpg" alt></div>
+				<div class="item"><img src="http://www.juice.ph/cms_images/2016/The%20Burger%20Project.jpeg" alt></div>
+				<div class="item"><img src="http://upjma.com/images/part07-1.jpg" alt></div>
 			  </div>
 			  <!-- Carousel nav -->
 			  <a class="carousel-control left" href="#myCarousel" data-slide="prev"><</a>
