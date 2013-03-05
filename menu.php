@@ -112,7 +112,7 @@
 					You are logged in as <?php echo $row[2]." ".$row[3]; ?> | 
 					<a href="edit.php">Edit</a> | 
 					<?php
-						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Products</a> | ';
+						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Admin</a> | ';
 						else echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].')</a> | ';
 					?>
 					<a href="logout.php">Log out</a><br/>

@@ -77,6 +77,17 @@
 <head>
 	<title>BRGR: The Burger Project Online</title>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
+	<script type="text/javascript">
+		function deleteAlert(){
+			var a = confirm("Are you sure you want to delete this product?");
+			if(a===true){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	</script>
 </head>
 
 <body>
@@ -160,7 +171,7 @@
 					echo '<tr>';
 					echo '<td><b>'.$row[0].'</b><br/>Php '.$row[1].'<br/>'.$row[2].'</td>';
 					echo '<td><input type="submit" name="edit'.$row[0].'" value="Edit"/><br/>';
-					echo '<input type="submit" name="delete'.$row[0].'" value="Delete"/></td>';
+					echo '<input type="submit" name="delete'.$row[0].'" value="Delete" onclick="deleteAlert()"/></td>';
 					echo '</tr>';
 				}
 				pg_free_result($result);

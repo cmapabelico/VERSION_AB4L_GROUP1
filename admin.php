@@ -51,8 +51,9 @@
 			
 			<br/><br/><br/>
 			
-			<a href="product.php">Products</a><br/>
-			<a href="member.php">Members</a><br/>
+			<a id="adminproducts" href="product.php"><img src="images/admin_products.jpg"/></a> 			
+			<a id="adminmembers" href="member.php"><img src="images/admin_members.jpg"/></a>
+			<br/>
 			
 		</div>
 	
