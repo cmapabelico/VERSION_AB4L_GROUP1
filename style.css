@@ -56,20 +56,24 @@ a:link, a:active, a:visited{
 	text-decoration: none;
 }
 
+table.editformtable{
+	width: 450px;
+}
+
 table.editformtable td{
 	width: 300px;
 	border: none;
 }
 
 table.editformtable td.title{
-	width: 120px;
+	width: 200px;
 	text-align: right;
 	padding-right: 5px;
 	font-weight: bold;
 }
 
 table.editformtable input{
-	width: 300px;
+	width: 280px;
 }
 
 table.prodtable{

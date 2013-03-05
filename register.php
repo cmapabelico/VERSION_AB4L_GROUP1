@@ -34,12 +34,12 @@
 		$lmark2 = pg_escape_string($_POST['lmark2']);
 
 
-		$query = "INSERT INTO member(email, pword, fname, lname, contact, bday, 
+		$query = "INSERT INTO member(email, pw, fname, lname, contact, birthday, 
 		gender, floor, bldg, street, area, city, landmark, floor2, bldg2, street2,
-		area2, city2, landmark2) VALUES ('".$email."','".$password."',
+		area2, city2, landmark2, points) VALUES ('".$email."','".$password."',
 		'".$fname."','".$lname."','".$contact."',
 		'".$bday."','".$gender."','".$floor."','".$bldg."','".$street."','".$area."','".$city."','".$lmark."',
-		'".$floor2."','".$bldg2."','".$street2."','".$area2."','".$city2."','".$lmark2."')";
+		'".$floor2."','".$bldg2."','".$street2."','".$area2."','".$city2."','".$lmark2."', 0)";
 		$result = pg_query($query); 
 
 		$fgmembersite->RedirectToURL("thankyou.html");

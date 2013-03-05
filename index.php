@@ -21,7 +21,7 @@
 		}
 		else{
 			
-			$query = "select email, pword from member where email='".$email."' and pword like '".$password."'";
+			$query = "select email, pw from member where email='".$email."' and pw like '".$password."'";
 			$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 			$row = pg_fetch_row($result);
 		
@@ -75,7 +75,7 @@
 					$row = pg_fetch_row($result);	
 				?>
 					You are logged in as <?php echo $row[2]." ".$row[3]; ?> | 
-					<a href="edit.php">Edit</a> | 
+					<a href="edit.php">Profile</a> | 
 					<?php
 						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Admin</a> | ';
 						else echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].')</a> | ';

@@ -97,7 +97,7 @@
 <html>
 
 <head>
-	<title>BRGR: The Burger Project Online - Menu</title>
+	<title>BRGR: The Burger Project Online - Checkout</title>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 
@@ -124,7 +124,7 @@
 					$row = pg_fetch_row($result);	
 				?>
 					You are logged in as <?php echo $row[2]." ".$row[3]; ?> | 
-					<a href="edit.php">Edit</a> | 
+					<a href="edit.php">Profile</a> | 
 					<?php
 						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Admin</a> | ';
 						else echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].')</a> | ';

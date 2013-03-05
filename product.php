@@ -75,7 +75,7 @@
 <html>
 
 <head>
-	<title>BRGR: The Burger Project Online</title>
+	<title>BRGR: The Burger Project Online - Products List</title>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 	<script type="text/javascript">
 		function deleteAlert(){
@@ -112,7 +112,7 @@
 					$row = pg_fetch_row($result);	
 				?>
 					You are logged in as <?php echo $row[2]." ".$row[3]; ?> | 
-					<a href="edit.php">Edit</a> | 
+					<a href="edit.php">Profile</a> | 
 					<?php
 						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Admin</a> | ';
 						else echo '<a href="tray.php">Tray</a> | ';
