@@ -222,7 +222,9 @@
 					<a href="logout.php">Log out</a><br/>
 				<?php }
 					else{
-						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
+						echo 'Welcome guest! ';
+						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 				

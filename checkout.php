@@ -11,6 +11,10 @@
 	$error ='';
 	$msg = '';
 	
+	//Guest details
+	$gname = '';
+	$gcontact = '';
+	
 	$payment = 0;
 	
 	//Get user details from database
@@ -69,26 +73,46 @@
 		$city = $_POST["city"];
 		$landmark = $_POST["landmark"];
 		
-		$password = md5($_POST["password"]);
-		
-		if($password!=$pw){
-			$error = "Wrong password";
-			$showform1 = false;
-			$showform2 = false;
-			$showform3 = true;
+		if($_SESSION["id"]!=null){
+			$password = md5($_POST["password"]);
+			if($password!=$pw){
+				$error = "Wrong password";
+				$showform1 = false;
+				$showform2 = false;
+				$showform3 = true;
+			}
+			else{
+				$showform1 = false;
+				$showform2 = false;
+				$showform3 = false;
+				$msg = "Congratulations!";
+				//Reset number of tray contents, subtotal, & tray
+				$_SESSION["traycontents"] = 0;
+				$_SESSION["subtotal"] = 0;
+				$newtray = array();
+				$_SESSION["tray"] = $newtray;
+			}
 		}
 		else{
-			$showform1 = false;
-			$showform2 = false;
-			$showform3 = false;
-	
-			$msg = "Congratulations!";
-				
-			//Reset number of tray contents, subtotal, & tray
-			$_SESSION["traycontents"] = 0;
-			$_SESSION["subtotal"] = 0;
-			$newtray = array();
-			$_SESSION["tray"] = $newtray;
+			$gname = $_POST["guestname"];
+			$gcontact = $_POST["guestcontact"];
+			if(empty($gname) || empty($gcontact)){
+				$error = "Incomplete details";
+				$showform1 = false;
+				$showform2 = false;
+				$showform3 = true;
+			}
+			else{
+				$showform1 = false;
+				$showform2 = false;
+				$showform3 = false;
+				$msg = "Congratulations!";
+				//Reset number of tray contents, subtotal, & tray
+				$_SESSION["traycontents"] = 0;
+				$_SESSION["subtotal"] = 0;
+				$newtray = array();
+				$_SESSION["tray"] = $newtray;
+			}	
 		}
 		
 	}
@@ -132,7 +156,9 @@
 					<a href="logout.php">Log out</a><br/>
 				<?php }
 					else{
-						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
+						echo 'Welcome guest! ';
+						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 				
@@ -240,9 +266,16 @@
 					<tr><td>Payment</td><td colspan="2"><?php echo $payment; ?></td></tr>
 					<tr><td>Change</td><td colspan="2"><?php echo $payment - $_SESSION["subtotal"]; ?></td></tr>
 					
+					<?php if($_SESSION["id"]!=null){ ?>
 					<tr><td class="title">Email</td><td colspan="2"><input type="text" name="email" disabled="true" value="<?php echo $email; ?>" /></td></tr>
 					<tr><td class="title">Password</td><td colspan="2"><input type="password" name="password"/><?php if($error!='') echo $error; ?></td></tr>
+					<?php }else{ ?>
+					<tr><td class="title">Name</td><td colspan="2"><input type="text" name="guestname" value="<?php echo $gname; ?>" /></td></tr>
+					<tr><td class="title">Contact no</td><td colspan="2"><input type="number" name="guestcontact" value="<?php echo $gcontact; ?>"/><?php if($error!='') echo $error; ?></td></tr>
+					<?php } ?>
 					<tr><td></td><td><input type="submit" name="submit3" value="Confirm Transaction"/></td><td></td></tr>
+				
+				
 				</table>
 			</form>
 			<?php } ?>

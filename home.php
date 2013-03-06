@@ -6,7 +6,12 @@
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
 	//Check if user is logged in
-	if($_SESSION["login"]!=1) $_SESSION["id"]=null;
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if($_SESSION["tray"]==null) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+	}
 	
 ?>
 <html>
@@ -46,7 +51,9 @@
 					<a href="logout.php">Log out</a><br/>
 				<?php }
 					else{
-						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
+						echo 'Welcome guest! ';
+						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 			</div>

@@ -72,7 +72,9 @@
 					<a href="logout.php">Log out</a><br/>
 				<?php }
 					else{
-						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
+						echo 'Welcome guest! ';
+						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 				
@@ -107,10 +109,10 @@
 										echo "<ul>";
 										echo "<li>".$_SESSION["tray"][$i]->brgr."</li>";
 										echo "<li>".$_SESSION["tray"][$i]->bun."</li>";
-										echo "<li>".$_SESSION["tray"][$i]->cheese."</li>";
-										echo "<li>".$_SESSION["tray"][$i]->basic."</li>";
-										echo "<li>".$_SESSION["tray"][$i]->premium."</li>";
-										echo "<li>".$_SESSION["tray"][$i]->sauce."</li>";
+										if($_SESSION["tray"][$i]->cheese!=null) echo "<li>".$_SESSION["tray"][$i]->cheese."</li>";
+										if($_SESSION["tray"][$i]->basic!=null) echo "<li>".$_SESSION["tray"][$i]->basic."</li>";
+										if($_SESSION["tray"][$i]->premium!=null) echo "<li>".$_SESSION["tray"][$i]->premium."</li>";
+										if($_SESSION["tray"][$i]->sauce!=null) echo "<li>".$_SESSION["tray"][$i]->sauce."</li>";
 										echo "</ul>";
 									}
 									else echo $_SESSION["tray"][$i]->name;
