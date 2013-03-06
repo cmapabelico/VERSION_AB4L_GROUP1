@@ -86,9 +86,9 @@
 					<form name="form" action="tray.php" method="post">
 						
 						<tr class="th">
-							<td>Product Name</td>
-							<td>Quantity</td>
-							<td>Price</td>
+							<td><b>Product Name</b></td>
+							<td><b>Quantity</b></td>
+							<td><b>Price</b></td>
 						</tr>
 					
 					<?php
@@ -99,7 +99,23 @@
 					?>
 					
 						<tr>
-							<td><?php echo $_SESSION["tray"][$i]->name; ?></td>
+							<td>
+								<?php
+
+									if($_SESSION["tray"][$i]->name == "Custom burger"){
+										echo "Custom burger";
+										echo "<ul>";
+										echo "<li>".$_SESSION["tray"][$i]->brgr."</li>";
+										echo "<li>".$_SESSION["tray"][$i]->bun."</li>";
+										echo "<li>".$_SESSION["tray"][$i]->cheese."</li>";
+										echo "<li>".$_SESSION["tray"][$i]->basic."</li>";
+										echo "<li>".$_SESSION["tray"][$i]->premium."</li>";
+										echo "<li>".$_SESSION["tray"][$i]->sauce."</li>";
+										echo "</ul>";
+									}
+									else echo $_SESSION["tray"][$i]->name;
+								?>
+							</td>
 							<td>
 								<input type="number" min="0" name="quantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/> 
 								<input type="hidden" name="prevquantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/>
@@ -116,7 +132,7 @@
 						<!-- Subtotal -->
 						<tr class="th">
 							<td id="empty"></td>
-							<td>Subtotal</td>
+							<td><b>Subtotal</b></td>
 							<td><?php  echo $_SESSION["subtotal"]; ?></td>
 						</tr>
 					</table>

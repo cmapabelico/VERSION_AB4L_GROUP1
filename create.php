@@ -66,14 +66,14 @@
 		$brgr = $_POST["brgr"];
 		$bun = $_POST["bun"];
 		if(isset($_POST["cheese"])){
-			$cheese = $_POST["cheese"];
-			if(count($cheese) > 0){
-				for($i=0;$i < count($cheese);$i++){
+			$c = $_POST["cheese"];
+			if(count($c) > 0){
+				for($i=0;$i < count($c);$i++){
 					//get item details
-					$q = "select * from product where pname='".$cheese[$i]."';";
+					$q = "select * from product where pname='".$c[$i]."';";
 					$r = pg_query($dbconn, $q);
 					$row = pg_fetch_row($r);
-					$cheese.= $row[0]." ";
+					$cheese.= $row[0]."<br/>";
 					$price += $row[1];
 				}
 			}
@@ -93,14 +93,14 @@
 		$bun = $_POST["bun"];
 		$cheese = $_POST["cheese"];
 		if(isset($_POST["premium"])){
-			$premium = $_POST["premium"];
-			if(count($premium) > 0){
-				for($i=0;$i < count($premium);$i++){
+			$pr = $_POST["premium"];
+			if(count($pr) > 0){
+				for($i=0;$i < count($pr);$i++){
 					//get item details
-					$q = "select * from product where pname='".$premium[$i]."';";
+					$q = "select * from product where pname='".$pr[$i]."';";
 					$r = pg_query($dbconn, $q);
 					$row = pg_fetch_row($r);
-					$premium.= $row[0]." ";
+					$premium.= $row[0]."<br/>";
 					$price += $row[1];
 				}
 			}
@@ -122,14 +122,14 @@
 		$cheese = $_POST["cheese"];
 		$premium = $_POST["premium"];
 		if(isset($_POST["basic"])){
-			$basic = $_POST["basic"];
-			if(count($basic) > 0){
-				for($i=0;$i < count($basic);$i++){
+			$b = $_POST["basic"];
+			if(count($b) > 0){
+				for($i=0;$i < count($b);$i++){
 					//get item details
-					$q = "select * from product where pname='".$basic[$i]."';";
+					$q = "select * from product where pname='".$b[$i]."';";
 					$r = pg_query($dbconn, $q);
 					$row = pg_fetch_row($r);
-					$basic.= $row[0]." ";
+					$basic.= $row[0]."<br/>";
 					$price += $row[1];
 				}
 			}
@@ -154,14 +154,14 @@
 		$premium = $_POST["premium"];
 		$basic = $_POST["basic"];
 		if(isset($_POST["sauce"])){
-			$sauce = $_POST["sauce"];
-			if(count($sauce) > 0){
-				for($i=0;$i < count($sauce);$i++){
+			$s = $_POST["sauce"];
+			if(count($s) > 0){
+				for($i=0;$i < count($s);$i++){
 					//get item details
-					$q = "select * from product where pname='".$sauce[$i]."';";
+					$q = "select * from product where pname='".$s[$i]."';";
 					$r = pg_query($dbconn, $q);
 					$row = pg_fetch_row($r);
-					$sauce.= $row[0]." ";
+					$sauce.= $row[0]."<br/>";
 					$price += $row[1];
 				}
 			}
