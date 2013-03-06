@@ -101,7 +101,7 @@ table.menutable td{
 	background-color:black;
 }
 
-#adminproducts img, #adminmembers img{
+#adminproducts img, #adminmembers img, #adminsummary img{
 	border-radius: 20px;
 	margin: 10px;
 }

@@ -46,6 +46,8 @@
 	
 	if(isset($_POST["submit2"])){
 	
+		$error='';
+	
 		$payment = $_POST["payment"];
 		
 		$floor = $_POST["floor"];
@@ -55,9 +57,16 @@
 		$city = $_POST["city"];
 		$landmark = $_POST["landmark"];
 		
-		$showform1 = false;
-		$showform2 = false;
-		$showform3 = true;
+		if(empty($street) || empty($area) || empty($city) || empty($landmark)){
+			$showform1 = false;
+			$showform2 = true;
+			$error = "* Please enter street, area, city, and a landmark";
+		}
+		else{
+			$showform1 = false;
+			$showform2 = false;
+			$showform3 = true;
+		}
 	
 	}
 	
@@ -97,7 +106,7 @@
 			$gname = $_POST["guestname"];
 			$gcontact = $_POST["guestcontact"];
 			if(empty($gname) || empty($gcontact)){
-				$error = "Incomplete details";
+				$error = "* Incomplete details";
 				$showform1 = false;
 				$showform2 = false;
 				$showform3 = true;
@@ -216,6 +225,9 @@
 					<tr><td class="title">City</td><td><input type="text" name="city" placeholder="City" value="<?php echo $city; ?>" /></td></tr>
 					<tr><td class="title">Landmark/s</td><td><input type="text" name="landmark" placeholder="Landmark" value="<?php echo $landmark; ?>" /></td></tr>
 				</table>
+				
+					<?php if($error!='') echo $error.'<br/><br/>'; ?>
+				
 					<input type="hidden" name="payment" value="<?php echo $payment; ?>"/>
 					<input type="submit" name="submit2" value="Submit"/>
 			</form>
@@ -266,15 +278,16 @@
 					<tr><td>Payment</td><td colspan="2"><?php echo $payment; ?></td></tr>
 					<tr><td>Change</td><td colspan="2"><?php echo $payment - $_SESSION["subtotal"]; ?></td></tr>
 					
+					<tr><td colspan="3"><br/></td></tr>
+					
 					<?php if($_SESSION["id"]!=null){ ?>
 					<tr><td class="title">Email</td><td colspan="2"><input type="text" name="email" disabled="true" value="<?php echo $email; ?>" /></td></tr>
 					<tr><td class="title">Password</td><td colspan="2"><input type="password" name="password"/><?php if($error!='') echo $error; ?></td></tr>
 					<?php }else{ ?>
 					<tr><td class="title">Name</td><td colspan="2"><input type="text" name="guestname" value="<?php echo $gname; ?>" /></td></tr>
-					<tr><td class="title">Contact no</td><td colspan="2"><input type="number" name="guestcontact" value="<?php echo $gcontact; ?>"/><?php if($error!='') echo $error; ?></td></tr>
+					<tr><td class="title">Contact no</td><td colspan="2"><input type="number" name="guestcontact" value="<?php echo $gcontact; ?>"/><?php if($error!='') echo "<br/>".$error; ?></td></tr>
 					<?php } ?>
-					<tr><td></td><td><input type="submit" name="submit3" value="Confirm Transaction"/></td><td></td></tr>
-				
+					<tr><td></td><td><br/><input type="submit" name="submit3" value="Confirm Transaction"/></td><td></td></tr>
 				
 				</table>
 			</form>

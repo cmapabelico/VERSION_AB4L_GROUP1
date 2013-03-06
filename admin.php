@@ -53,6 +53,7 @@
 			
 			<a id="adminproducts" href="product.php"><img src="images/admin_products.jpg"/></a> 			
 			<a id="adminmembers" href="member.php"><img src="images/admin_members.jpg"/></a>
+			<a id="adminsummary" href="summary.php"><img src="images/admin_summary.jpg"/></a>
 			<br/>
 			
 		</div>
