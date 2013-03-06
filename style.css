@@ -105,3 +105,17 @@ table.menutable td{
 	border-radius: 20px;
 	margin: 10px;
 }
+
+img.gallery{
+	width: 300px;
+}
+
+td.menupic{
+	border: none;
+	padding: 0px;
+	text-align: center;
+}
+
+td.menupic img{
+	width: 320px;
+}

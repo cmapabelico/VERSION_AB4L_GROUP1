@@ -32,7 +32,7 @@
 		$area2 = pg_escape_string($_POST['area2']);
 		$city2 = pg_escape_string($_POST['city2']);
 		$lmark2 = pg_escape_string($_POST['lmark2']);
-
+		
 
 		$query = "INSERT INTO member(email, pw, fname, lname, contact, birthday, 
 		gender, floor, bldg, street, area, city, landmark, floor2, bldg2, street2,

@@ -75,8 +75,11 @@
 				}
 			}
 		}
-	
 		header("Location:tray.php");
+	}
+	
+	if(isset($_POST["create"])){
+		header("Location: create.php");
 	}
 	
 ?>
@@ -127,11 +130,11 @@
 			</div>
 			
 			<br/><br/><br/>
-			<a href="create.php">CREATE CUSTOM BURGER</a>
-			<br/><br/><br/>
 			
+			<table class="menutable"><tr>
 			<form name="menuform" action="menu.php" method="POST">
 		
+			<td>
 			<h1>DESIGNR BRGRS</h1><br/>
 			<?php
 				$query = "select * from product where ptype='premade'";
@@ -140,9 +143,9 @@
 					echo '<input type="checkbox" name="premade[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-			
-			<br/>
-			
+			</td>
+		
+			<td>
 			<h1>SIDES</h1><br/>	
 			<?php
 				$query = "select * from product where ptype='sides'";
@@ -151,9 +154,9 @@
 					echo '<input type="checkbox" name="sides[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-			
-			<br/>
+			</td>
 
+			<td>
 			<h1>MILKSHAKES</h1><br/>
 			<?php
 				$query = "select * from product where ptype='milkshake'";
@@ -162,9 +165,9 @@
 					echo '<input type="checkbox" name="milkshake[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
+			</td>
 			
-			<br/>
-			
+			<td>
 			<h1>BEVERAGES</h1><br/>
 			<?php
 				$query = "select * from product where ptype='beverage'";
@@ -173,12 +176,30 @@
 					echo '<input type="checkbox" name="beverage[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-		
-			<br/><br/><br/>
+			</td>
 			
-			<input type="submit" name="submit" value="Submit"/>
+			</tr>
+			
+			<tr><td colspan="4"><center>
+				<input style="width: 200px;" type="submit" name="submit" value="Add items to tray"/><br/>
+				<input style="width: 200px;" type="submit" name="create" value="Create custom burger"/><br/>
+			</center></td></tr>
+			
+			<tr>
+				<td class="menupic" colspan="2"><img src="images/menu/1.jpg"/></td>
+				<td class="menupic" colspan="2"><img src="images/menu/2.jpg"/></td>
+			</tr>
+			<tr>
+				<td class="menupic" colspan="2"><img src="images/menu/3.jpg"/></td>
+				<td class="menupic" colspan="2"><img src="images/menu/4.jpg"/></td>
+			</tr>
+			<tr>
+				<td class="menupic" colspan="2"><img src="images/menu/5.jpg"/></td>
+				<td class="menupic" colspan="2"><img src="images/menu/6.jpg"/></td>
+			</tr>
 			
 			</form>				
+			</table>
 			
 		</div>
 	
