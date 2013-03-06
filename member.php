@@ -86,6 +86,12 @@
 <head>
 	<title>BRGR: The Burger Project Online - Members List</title>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
+	<script type="text/javascript">
+		function deleteAlert(){
+			var c = confirm("Are you sure you want to delete this member?");
+			return c;
+		}
+	</script>
 </head>
 
 <body>
@@ -166,7 +172,7 @@
 					echo '<td><b>'.$row[0].'</b><br/>'.$row[2].' '.$row[3].'</td>';
 					$temp = str_replace(".","",$row[0]);
 					echo '<td><input type="submit" name="view'.$temp.'" value="View"/><br/>';
-					echo '<input type="submit" name="delete'.$temp.'" value="Delete"/></td>';
+					echo '<input type="submit" name="delete'.$temp.'" value="Delete" onclick="return deleteAlert()"/></td>';
 					echo '</tr>';
 				}
 				pg_free_result($result);

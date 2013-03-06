@@ -11,33 +11,101 @@
 	if($_SESSION["id"]!='theburgerproject@gmail.com'){
 		header("Location:home.php");
 	}
+
+	$error1 = "";
+	$error2 = "";
+	$error3 = "";
 	
 	//Add product form
 	if(isset($_POST["addsubmit"])){
 	
+		$error1="";
+		$error2="";
+		$error3="";
+	
+		$update = true;
 		$name = $_POST["name"];
 		$price = $_POST["price"];
-		$type = $_POST["type"];
 	
-		//Form validation
-	
+		//Check name
+		if(empty($name)){
+			$update = false;
+			$error1 = "* Name required";
+		}
+		else{
+			$n = pg_query($dbconn, "select * from product where pname='$name'");
+			if(pg_num_rows($n)>0){
+				$update = false;
+				$error1 = "* Product already exists";
+			}
+		}
+		//Check price
+		if(empty($price)){
+			$update = false;
+			$error2 = "* Price required";
+		}
+		else if($price <= 0){
+			$update = false;
+			$error2 = "* Invalid price";
+		}
+		//Check type
+		if(!isset($_POST["ptype"])){
+			$update = false;
+			$error3 = "* Type required";
+		}
+		else{
+			$type = $_POST["ptype"];
+		}
 	
 		//Add product to database
-		$query = "insert into product values('$name', $price, '$type');";
-		pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
-		$update = true;
+		if($update){
+			$query = "insert into product values('$name', $price, '$type');";
+			pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
+			$name="";$price="";$type="";
+		}
 	
 	}
 
 	//Edit product form
 	if(isset($_POST["editsubmit"])){
 	
+		$error1="";
+		$error2="";
+		$error3="";
+	
 		$pname = $_POST["pname"];
 		$pprice = $_POST["pprice"];
-		$ptype = $_POST["ptype"];
 		$p = $_POST["oldname"];
 	
-		//Form validation
+		//Check name
+		if(empty($pname)){
+			$update = false;
+			$error1 = "* Name required";
+		}
+		else{
+			$n = pg_query($dbconn, "select * from product where pname='$pname'");
+			if(pg_num_rows($n)>0){
+				$update = false;
+				$error1 = "* Product already exists";
+			}
+		}
+		//Check price
+		if(empty($pprice)){
+			$update = false;
+			$error2 = "* Price required";
+		}
+		else if($pprice <= 0){
+			$update = false;
+			$error2 = "* Invalid price";
+		}
+		///Check type
+		if(!isset($_POST["eptype"])){
+			$update = false;
+			$error3 = "* Type required";
+		}
+		else{
+			$ptype = $_POST["eptype"];
+		}
 		
 		
 		//Update product info in database
@@ -50,14 +118,15 @@
 	$query = 'select * from product';
 	$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());		
 	while($row=pg_fetch_row($result)){
+		$temp = str_replace(" ","",$row[0]);
 		//Delete product
-		if(isset($_POST["delete$row[0]"])){
+		if(isset($_POST["delete$temp"])){
 			$q = "delete from product where pname='".$row[0]."'";
 			$r = pg_query($dbconn, $q) or die('Query failed: ' . pg_last_error());
 			$update = true;
 		}
 		//Check which product to edit
-		if(isset($_POST["edit$row[0]"])){
+		if(isset($_POST["edit$temp"])){
 			$showeditform = true;
 			$q = "select * from product where pname='$row[0]'";
 			$r = pg_query($dbconn, $q) or die('Query failed: ' . pg_last_error());
@@ -79,13 +148,8 @@
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 	<script type="text/javascript">
 		function deleteAlert(){
-			var a = confirm("Are you sure you want to delete this product?");
-			if(a===true){
-				return true;
-			}
-			else{
-				return false;
-			}
+			var c = confirm("Are you sure you want to delete this product?");
+			return c;
 		}
 	</script>
 </head>
@@ -127,15 +191,45 @@
 			
 			<br/><br/><br/>
 			
-			<?php if($update) echo 'Products list updated<br/><br/>'; ?>	
+			<?php if($update) echo '<b>PRODUCTS LIST UPDATED</b><br/><br/>'; ?>	
 			
 			<!--ADD PRODUCT FORM-->
 			Add Product<br/><br/>
 			<table class="addprodtable">
 			<form name="addform" action="product.php" method="POST">
-				<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="name" placeholder="Name"/></td></tr>
-				<tr><td style="text-align: right; font-weight: bold;">Price</td><td><input type="number" name="price" placeholder="Price"/></td></tr>
-				<tr><td style="text-align: right; font-weight: bold;">Type</td><td><input type="text" name="type" placeholder="Type"/></td></tr>
+				<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="name" placeholder="Name" value="<?php if(isset($name))echo $name;?>"/></td>
+					<?php
+							if($error1!=""){
+								echo "<td>".$error1."</td>";
+							}
+						?>
+				</tr>
+				<tr><td style="text-align: right; font-weight: bold;">Price</td><td><input type="number" name="price" placeholder="Price" value="<?php if(isset($price))echo $price;?>"/></td>
+					<?php
+						if($error2!=""){
+							echo "<td>".$error2."</td>";
+						}
+					?>
+				</tr>
+				<tr>
+					<td style="text-align: right; font-weight: bold;vertical-align:top;">Type</td>
+					<td>
+						<?php 
+							//Print all types from database
+							$query = 'select ptype from product group by ptype';
+							$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+							while($row=pg_fetch_row($result)){
+								echo '<input type="radio" name="ptype" value="'.$row[0].'"/>'.$row[0]."<br/>";
+							}
+						?>
+						<br/>
+					</td>
+					<?php
+						if($error3!=""){
+							echo "<td>".$error3."</td>";
+						}
+					?>
+				</tr>
 				<tr><td colspan="2"><center><input type="submit" name="addsubmit" value="Submit"/></center></td></tr>
 			</form>
 			</table>
@@ -147,9 +241,40 @@
 				Edit Product<br/>
 				<table class="addprodtable">
 				<form name="editform" action="product.php" method="POST">
-					<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="pname" placeholder="Name" <?php if($pname!=null) echo 'value="'.$pname.'"'; ?>/></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Price</td><td><input type="number" name="pprice" placeholder="Price" <?php if($pprice!=null) echo 'value="'.$pprice.'"'; ?>/></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Type</td><td><input type="text" name="ptype" placeholder="Type" <?php if($ptype!=null) echo 'value="'.$ptype.'"'; ?>/></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="pname" placeholder="Name" <?php if($pname!=null) echo 'value="'.$pname.'"'; ?>/></td>
+						<?php
+							if($error1!=""){
+								echo "<td>".$error1."</td>";
+							}
+						?>
+					</tr>
+					<tr><td style="text-align: right; font-weight: bold;">Price</td><td><input type="number" name="pprice" placeholder="Price" <?php if($pprice!=null) echo 'value="'.$pprice.'"'; ?>/></td>
+						<?php
+							if($error2!=""){
+								echo "<td>".$error2."</td>";
+							}
+						?>
+					</tr>
+					<tr>
+					<td style="text-align: right; font-weight: bold;vertical-align:top;">Type</td>
+					<td>
+						<?php 
+							//Print all types from database
+							$query = 'select ptype from product group by ptype';
+							$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+							while($row=pg_fetch_row($result)){
+								if($ptype==$row[0]) echo '<input type="radio" checked="true" name="eptype" value="'.$row[0].'"/>'.$row[0]."<br/>";
+								else echo '<input type="radio" name="eptype" value="'.$row[0].'"/>'.$row[0]."<br/>";
+							}
+						?>
+						<br/>
+					</td>
+					<?php
+						if($error3!=""){
+							echo "<td>".$error3."</td>";
+						}
+					?>
+				</tr>
 					<tr><td colspan="2"><center><input type="submit" name="editsubmit" value="Submit"/></center></td></tr>
 					<input type="hidden" name="oldname" value="<?php echo $p; ?>"/>
 				</form>
@@ -165,13 +290,14 @@
 			<form name="prodform" action="product.php" method="POST">
 			<?php
 				//Print all products from database
-				$query = 'select * from product order by ptype';
+				$query = 'select * from product order by pname';
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 				while($row=pg_fetch_row($result)){
 					echo '<tr>';
 					echo '<td><b>'.$row[0].'</b><br/>Php '.$row[1].'<br/>'.$row[2].'</td>';
-					echo '<td><input type="submit" name="edit'.$row[0].'" value="Edit"/><br/>';
-					echo '<input type="submit" name="delete'.$row[0].'" value="Delete" onclick="deleteAlert()"/></td>';
+					$temp = str_replace(" ","",$row[0]);
+					echo '<td><input type="submit" name="edit'.$temp.'" value="Edit"/><br/>';
+					echo '<input type="submit" name="delete'.$temp.'" value="Delete" onclick="return deleteAlert()"/></td>';
 					echo '</tr>';
 				}
 				pg_free_result($result);
