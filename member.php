@@ -8,6 +8,7 @@
 	$viewmember = false;
 	
 	$email = '';
+	$points = '';
 	$fname = '';
 	$lname = '';
 	$contact = '';
@@ -68,6 +69,7 @@
 			$area2 = $row[16];
 			$city2 = $row[17];
 			$landmark2 = $row[18];
+			$points = $row[19];
 
 			$viewmember = true;
 		}
@@ -135,6 +137,7 @@
 			
 				<table>
 					<tr><td>Email</td><td><?php echo $email; ?></td></tr>
+					<tr><td>Points</td><td><?php echo $points; ?></td></tr>
 					<tr><td>First name</td><td><?php echo $fname; ?></td></tr>
 					<tr><td>Last name</td><td><?php echo $lname; ?></td></tr>
 					<tr><td>Contact</td><td><?php echo $contact; ?></td></tr>
@@ -158,6 +161,8 @@
 			
 			<?php } ?>
 			
+			<?php if($update) echo "<b>MEMBERS LIST UPDATED</b><br/><br/>"; ?>
+			
 			<!--MEMBERS LIST-->
 			Members List<br/><br/>
 			
@@ -168,12 +173,14 @@
 				$query = 'select * from member';
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 				while($row=pg_fetch_row($result)){
-					echo '<tr>';
-					echo '<td><b>'.$row[0].'</b><br/>'.$row[2].' '.$row[3].'</td>';
-					$temp = str_replace(".","",$row[0]);
-					echo '<td><input type="submit" name="view'.$temp.'" value="View"/><br/>';
-					echo '<input type="submit" name="delete'.$temp.'" value="Delete" onclick="return deleteAlert()"/></td>';
-					echo '</tr>';
+					if($row[0]!="theburgerproject@gmail.com"){
+						echo '<tr>';
+						echo '<td><b>'.$row[0].'</b><br/>'.$row[2].' '.$row[3].'</td>';
+						$temp = str_replace(".","",$row[0]);
+						echo '<td><input type="submit" name="view'.$temp.'" value="View"/><br/>';
+						echo '<input type="submit" name="delete'.$temp.'" value="Delete" onclick="return deleteAlert()"/></td>';
+						echo '</tr>';
+					}
 				}
 				pg_free_result($result);
 			?>

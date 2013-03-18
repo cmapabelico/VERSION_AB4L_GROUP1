@@ -5,12 +5,11 @@
 	require_once("./include/membersite_config.php");
 	
 	if($_SESSION["login"]==1){
-		header("Location: home.php");
+		header("Location: index.php");
 	}
 	
 	if(isset($_POST['submitted']))
 	{
-		
 		$db = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
 		$email = pg_escape_string($_POST['email']);
@@ -42,7 +41,7 @@
 		'".$floor2."','".$bldg2."','".$street2."','".$area2."','".$city2."','".$lmark2."', 0)";
 		$result = pg_query($query); 
 
-		$fgmembersite->RedirectToURL("thankyou.html");
+		$fgmembersite->RedirectToURL("index.php");
 	}
 ?>
 
@@ -91,7 +90,7 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
@@ -150,14 +149,14 @@
 				<!--gender-->
 				<div class="container">
 					<label for="gender">Gender*:</label><br/>
-					<input type="radio" name="gender" id="gender">Male<br/>
-					<input type="radio" name="gender" id="gender">Female<br/>
+					<input type="radio" name="gender" id="gender" value="male">Male<br/>
+					<input type="radio" name="gender" id="gender" value="female">Female<br/>
 					<span id='register_gender_errorloc' class='error'></span>
 				</div>
 				<!--floor-->
 				<div class="container">
 					<label for="floor">Floor number/Department/House number:</label><br/>
-					<input type="text" name="floor" id="floor" maxlength="2"/><br/>
+					<input type="text" name="floor" id="floor" maxlength="4"/><br/>
 					<span id='register_floor_errorloc' class='error'></span>
 				</div>
 				<!--bldg-->
@@ -230,7 +229,7 @@
 				</div>
 								
 				<div class='container'>
-					<input type='submit' name='Submit' value='Submit' />
+					<input type='submit' name='Submit' value='Submit' onclick='myFunction()'/>
 				</div>
 				
 				</fieldset>
@@ -263,6 +262,11 @@
 		frmvalidator.addValidation("email","req","Please provide your email address");
 		frmvalidator.addValidation("email","email","Please provide a valid email address");
 		frmvalidator.addValidation("password","req","Please provide a password");
+		
+		function myFunction(){
+			alert("Registration Successful!");
+		}
+
 	// ]]>
 	</script>
 

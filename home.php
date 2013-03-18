@@ -8,7 +8,7 @@
 	//Check if user is logged in
 	if($_SESSION["login"]!=1){
 		$_SESSION["id"]=null; //guest
-		if($_SESSION["tray"]==null) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
 		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
 		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
 	}
@@ -52,7 +52,7 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>

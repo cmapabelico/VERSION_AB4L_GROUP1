@@ -5,44 +5,136 @@
 	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 	
-	$print =false;
+	$print = '';
+	$print2 = '';
+	$date = '';
+	$value = '';
 	//If user is not admin, redirect to home page
 	if($_SESSION["id"]!='theburgerproject@gmail.com'){
 		header("Location:home.php");
 	}
 	//Gross Income
+	
+	//highestday
 	if(isset($_POST["hdsubmit"])){
 						
 	//Getting gross income
-		$query = "select * from store_summary where total_income = (select max(total_income) from store_summary) ;";
+		$query = "select extract(month from store_date),extract(day from store_date),extract(year from store_date),total_income as output from store_summary where total_income = (select max(total_income) from store_summary)";
 		$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 		while($row = pg_fetch_row($result)){
 							
-		$value = $row[3];
-		$date = $row[0];
+		$date = 'Date: '.$row[0]." - ".$row[1]." - ".$row[2];
+		$value = 'Income: '.$row[3];
+		$print = 'go';
 		}
-		$print = true;
 	}
 	
-	//Edit product form
-	if(isset($_POST["editsubmit"])){
+	//highestmonth
+	if(isset($_POST["hmsubmit"])){
+						
+	//Getting gross income
+		$max = 0;
+		for($i = 1;$i<=12;$i++){
+			$query = "select sum(total_income) from store_summary where (select extract(month from store_date) = {$i} )";
+			$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+			while($row = pg_fetch_row($result)){
+				if($row[0] > $max){
+				$max = $row[0];
+				$value = 'Income: '.$max;
+				$date = 'Month: '.$i;
+				$print = 'go';
+				}
+			}
+		}
+	}
+
+	//highestyear
+	if(isset($_POST["hysubmit"])){
+						
+	//Getting gross income
+		$max = 0;
+			
+			$years = "select extract(year from store_date) from store_summary group by extract(year from store_date)";
+			$res = pg_query($dbconn, $years) or die('Query failed: ' . pg_last_error());
+			while($row = pg_fetch_row($res)){
+				foreach($row as $index){
+				
+				$query = "select sum(total_income) as output from store_summary where extract(year from store_date)={$index}";
+				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+					while($row = pg_fetch_row($result)){
+						if($row[0] > $max){
+						$max = $row[0];
+						$value = "Income: ".$max;
+						$date = "Year: ".$index;
+						$print = 'go';
+						}
+					}
+				}
+			}
+	}
+
 	
-		$pname = $_POST["pname"];
-		$pprice = $_POST["pprice"];
-		$ptype = $_POST["ptype"];
-		$p = $_POST["oldname"];
 	
-		//Form validation
-		
-		
-		//Update product info in database
-		$query = "update product set pname='$pname', price=$pprice, ptype='$ptype' where pname='$p';";
-		pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
-		$update = true;
+	//CUSTOMER COUNT
+	
+	if(isset($_POST["hdsubmitc"])){
 	
 	}
 	
+	//highestday
+	if(isset($_POST["hdsubmitc"])){
+						
+		$query = "select extract(month from store_date),extract(day from store_date),extract(year from store_date),total_num_member_orders as output from store_summary where total_num_member_orders = (select max(total_num_member_orders) from store_summary)";
+		$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+		while($row = pg_fetch_row($result)){
+							
+		$value = "Visitor Count: ".$row[3];
+		$date = "Date: ".$row[0]." - ".$row[1]." - ".$row[2];
+		$print2 = 'go';
+		}
+	}
 	
+	//highestmonth
+	if(isset($_POST["hmsubmitc"])){
+						
+		$max = 0;
+		for($i = 1;$i<=12;$i++){
+			$query = "select sum(total_num_member_orders) from store_summary where (select extract(month from store_date) = {$i} )";
+			$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+			while($row = pg_fetch_row($result)){
+				if($row[0] > $max){
+				$max = $row[0];
+				$value = "Visitor Count: ".$max;
+				$date = "Month: ".$i;
+				$print2 = 'go';
+				}
+			}
+		}
+	}
+	
+	//highestyear
+	if(isset($_POST["hysubmitc"])){
+						
+		$max = 0;
+			
+			$years = "select extract(year from store_date) from store_summary group by extract(year from store_date)";
+			$res = pg_query($dbconn, $years) or die('Query failed: ' . pg_last_error());
+			while($row = pg_fetch_row($res)){
+				foreach($row as $index){
+				
+				$query = "select sum(total_num_member_orders) as output from store_summary where extract(year from store_date)={$index}";
+				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+					while($row = pg_fetch_row($result)){
+						if($row[0] > $max){
+						$max = $row[0];
+						$value = "Visitor Count: ".$max;
+						$date = "Year: ".$index;
+						$print2 = 'go';
+						}
+					}
+				}
+			}
+	}
 ?>
 
 <html>
@@ -93,53 +185,22 @@
 			Gross Income<br/><br/>
 			<table class="addprodtable">
 				<form name="addform" action="summary.php" method="POST">
-					<tr><td style="text-align: right; font-weight: bold;">Daily</td><td>
-						<select>
-								<option name = "date" value = "1">January</option>
-								<option name = "date" value = "2">February</option>
-								<option name = "date" value = "3">March</option>
-								<option name = "date" value = "4">April</option>
-								<option name = "date" value = "5">May</option>
-								<option name = "date" value = "6">June</option>
-								<option name = "date" value = "7">July</option>
-								<option name = "date" value = "8">August</option>
-								<option name = "date" value = "9">September</option>
-								<option name = "date" value = "10">October</option>
-								<option name = "date" value = "11">November</option>
-								<option name = "date" value = "12">December</option>
-						</select>
-					</td><td colspan="2"><center><input type="submit" name="dsubmit" value="Submit"/></center></td></tr>
-					
-					<tr><td style="text-align: right; font-weight: bold;">Monthly</td><td></td><td colspan="2"><center><input type="submit" name="msubmit" value="Submit"/></center></td></tr>
-					
-						<?php
-							/*
-							$query = 'select * from store_summary extract';
-							$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
-							while($row=pg_fetch_row($result)){
-								echo '<tr>';
-								echo '<td><b>'.$row[0].'</b><br/>Php '.$row[1].'<br/>'.$row[2].'</td>';
-								echo '</tr>';
-							}
-							pg_free_result($result);	
-							*/
-						?>
-						
-					<tr><td style="text-align: right; font-weight: bold;">Yearly</td></td></td><td><td colspan="2"><center><input type="submit" name="hsubmit" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Highest Day</td></td><td><td colspan="2"><center><input type="submit" name="hdsubmit" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Highest Month</td></td><td><td colspan="2"><center><input type="submit" name="hmsubmit" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Highest Year</td></td><td><td colspan="2"><center><input type="submit" name="hysubmit" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Income: </td></td><td><p id="change1">
+					<tr><td style="text-align: right; font-weight: bold;">Daily</td><td><input type='date' name='dailydate_income'/></td><td colspan="2"><center><input type="submit" name="dsubmit" value="Submit"/></center></td></tr>	
+					<tr><td style="text-align: right; font-weight: bold;">Monthly</td><td></td><td colspan="2"><center><input type="submit" name="msubmit" value="Submit"/></center></td></tr>						
+					<tr><td style="text-align: right; font-weight: bold;">Yearly</td></td><td>
+					<select>
 					<?php
 						
-						if($print){
-							echo "<br/>{$value}";
-							echo "<br/>{$date}";
-						
-						}
+					
 					?>
-					</p></tr>
+					</select>
+					</td><td colspan="2"><center><input type="submit" name="hsubmit" value="Submit"/></center></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;">Highest Day</td><td></td><td colspan="2"><center><input type="submit" name="hdsubmit" value="Submit"/></center></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;">Highest Month</td><td></td><td colspan="2"><center><input type="submit" name="hmsubmit" value="Submit"/></center></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;">Highest Year</td><td></td><td colspan="2"><center><input type="submit" name="hysubmit" value="Submit"/></center></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;"></td><td></td><td colspan="2"><center><input type="submit" name="clear" value="Clear"/></center></td></tr>
 				</form>
+					<tr><td style="text-align: right; font-weight: bold;"></td><td><p id="change1"><?php if($print != '')echo "<br/>{$value}<br/>{$date}";?></p></td></tr>
 			</table>
 			
 			<br/><br/><br/>
@@ -148,42 +209,16 @@
 			Customer Count<br/><br/>
 			<table class="addprodtable">
 				<form name="addform" action="summary.php" method="POST">
-					<tr><td style="text-align: right; font-weight: bold;">Daily</td><td>
-						<select>
-								<option name = "date" value = "1">January</option>
-								<option name = "date" value = "2">February</option>
-								<option name = "date" value = "3">March</option>
-								<option name = "date" value = "4">April</option>
-								<option name = "date" value = "5">May</option>
-								<option name = "date" value = "6">June</option>
-								<option name = "date" value = "7">July</option>
-								<option name = "date" value = "8">August</option>
-								<option name = "date" value = "9">September</option>
-								<option name = "date" value = "10">October</option>
-								<option name = "date" value = "11">November</option>
-								<option name = "date" value = "12">December</option>
-						</select>
-					</td><td colspan="2"><center><input type="submit" name="dsubmitc" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Monthly</td><td>
-						<?php
-							/*
-							$query = 'select * from store_summary';
-							$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
-							while($row=pg_fetch_row($result)){
-								echo '<tr>';
-								echo '<td><b>'.$row[0].'</b><br/>Php '.$row[1].'<br/>'.$row[2].'</td>';
-								echo '</tr>';
-							}
-							*/
-						?></td></td><td colspan="2"><center><input type="submit" name="msubmitc" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Yearly</td><td></td><td colspan="2"><center><input type="submit" name="ysubmitc" value="Submit"/></center></td></tr>
-					
+					<tr><td style="text-align: right; font-weight: bold;">Daily</td><td><input type='date' name='dailydate_visitors'/></td><td colspan="2"><center><input type="submit" name="dsubmitc" value="Submit"/></center></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;">Monthly</td><td></td></td><td colspan="2"><center><input type="submit" name="msubmitc" value="Submit"/></center></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;">Yearly</td><td></td><td colspan="2"><center><input type="submit" name="ysubmitc" value="Submit"/></center></td></tr>				
 					<tr><td style="text-align: right; font-weight: bold;">Highest Day</td><td></td><td colspan="2"><center><input type="submit" name="hdsubmitc" value="Submit"/></center></td></tr>
 					<tr><td style="text-align: right; font-weight: bold;">Highest Month</td><td></td><td colspan="2"><center><input type="submit" name="hmsubmitc" value="Submit"/></center></td></tr>
 					<tr><td style="text-align: right; font-weight: bold;">Highest Year</td><td></td><td colspan="2"><center><input type="submit" name="hysubmitc" value="Submit"/></center></td></tr>
-					<tr><td style="text-align: right; font-weight: bold;">Visitors: </td><td></td><td style="text-align: right; font-weight: bold;"><p id="change2"></p></td></tr>
+					<tr><td style="text-align: right; font-weight: bold;"></td><td></td><td colspan="2"><center><input type="submit" name="clear" value="Clear"/></center></td></tr>
 
 				</form>
+					<tr><td style="text-align: right; font-weight: bold;"></td><td><p id="change2"><?php if($print2 != '')echo "<br/>{$value}<br/>{$date}";?></p></td></tr>
 			</table>
 			
 			

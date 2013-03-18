@@ -53,7 +53,9 @@
 			
 			<a id="adminproducts" href="product.php"><img src="images/admin_products.jpg"/></a> 			
 			<a id="adminmembers" href="member.php"><img src="images/admin_members.jpg"/></a>
-			<a id="adminsummary" href="summary.php"><img src="images/admin_summary.jpg"/></a>
+			<a id="adminsummary" href="summary.php"><img src="images/admin_summary.jpg"/></a><br/>
+			<a href="order.php">View Pending Orders	</a><br/>
+			<a href="clearedorder.php">View Cleared Orders	</a><br/>
 			<br/>
 			
 		</div>

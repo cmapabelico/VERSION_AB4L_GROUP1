@@ -22,6 +22,11 @@
 	$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 	$row = pg_fetch_row($result);
 	
+	$num_items = $_SESSION["traycontents"];	
+	$subtotal = $_SESSION["subtotal"];
+	//$change = $payment - $_SESSION["subtotal"];
+	$temp = $payment;
+	
 	$email = $row[0];
 	$pw = $row[1];
 	$floor = $row[7];
@@ -71,7 +76,76 @@
 	}
 	
 	if(isset($_POST["submit3"])){
+		$payment = $_POST["payment"];
+		$order_id = rand(0001, 9999);
+		$_SESSION['order_id'] = $order_id;
+		
+		echo $_SESSION['order_id'];
+		
+		$date_created = date("Y-m-d H:i:s");
+		$date_cleared = '';
+		if($row[0] == ''){
+			$otype = 'guest';
+		}
+		else{
+			$otype = 'member';
+		}
 	
+		$n = count($_SESSION["tray"]);
+		$items = '';
+		for($i=0;$i<$n;$i++){
+			$items = $items.','.$_SESSION["tray"][$i]->name;
+		}
+		
+		$points = ($subtotal / 1000)*5;
+		$change = $payment - $subtotal;
+		
+		
+		//var_dump($subtotal);
+		
+		$error='';
+	
+		//$payment = $_POST["payment"];
+		$floor = $_POST["floor"];
+		$bldg = $_POST["bldg"];
+		$street = $_POST["street"];
+		$area = $_POST["area"];
+		$city = $_POST["city"];
+		$landmark = $_POST["landmark"];
+		
+		if(isset($_POST["password"])){
+			$password = md5($_POST["password"]);
+		
+			if($password!=$pw){
+				$error = "Wrong password";
+				$showform1 = false;
+				$showform2 = false;
+				$showform3 = true;
+			}
+			else{
+				$showform1 = false;
+				$showform2 = false;
+				$showform3 = false;
+		
+				$msg = "Congratulations!";
+					
+				//Reset number of tray contents, subtotal, & tray
+				$_SESSION["traycontents"] = 0;
+				$_SESSION["subtotal"] = 0;
+				$newtray = array();
+				$_SESSION["tray"] = $newtray;
+			}
+		}
+		
+		$query = "INSERT INTO orders VALUES ($order_id, '2013-01-02','2013-01-02','$otype','$email','$items','$num_items',$subtotal,$payment,$points,'pending')";
+		pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+		$query1 = "INSERT INTO cleared_orders VALUES ($order_id, '2013-01-02','2013-01-02','$otype','$email','$items','$num_items',$subtotal,$payment,$points,'pending')";
+		pg_query($dbconn, $query1) or die('Query failed: ' . pg_last_error());
+		$add_query = "select points from member where email = '".$email."'";
+		$points = $points + $add_query;
+		$query = "update member set points = $points where email = '".$email."'";
+		pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
+		
 		$error='';
 	
 		$payment = $_POST["payment"];
@@ -166,7 +240,7 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if($_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
