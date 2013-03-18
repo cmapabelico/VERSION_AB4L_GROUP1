@@ -3,13 +3,19 @@
 	include("prodclass.php");
 	session_start();
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
-
-	$showform1 = true;
-	$showform2 = false;
-	$showform3 = false;
-	$showform4 = false;
-	$showform5 = false;
-	$showform6 = false;
+	
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
+	//Check if user is logged in
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+	}
 	
 	$brgr='';
 	$bun='';
@@ -17,54 +23,33 @@
 	$premium='';
 	$basic='';
 	$sauce='';
-	
 	$price = 0;
 	
-	if(isset($_POST["submit1"])){
-		
+	$errorbrgr='';
+	$errorbun='';
+	
+	if(isset($_POST["submitburger"])){
+	
 		if(isset($_POST["brgr"])){
 			$brgr = $_POST["brgr"];
-			
 			$q = "select * from product where pname='".$brgr."';";
 			$r = pg_query($dbconn, $q);
 			$row = pg_fetch_row($r);
 			$price += $row[1];
-			
-			$showform1 = false;
-			$showform2 = true;
+		}else{
+			$errorbrgr = "BRGR required";
 		}
-		else{
-			$showform1 = true;
-		}
-
-	}
-	
-	if(isset($_POST["submit2"])){
-		$price = $_POST["price"];
-		$brgr = $_POST["brgr"];
 		
 		if(isset($_POST["bun"])){
 			$bun = $_POST["bun"];
-			
 			$q = "select * from product where pname='".$bun."';";
 			$r = pg_query($dbconn, $q);
 			$row = pg_fetch_row($r);
 			$price += $row[1];
-
-			$showform1 = false;
-			$showform2 = false;
-			$showform3 = true;
+		}else{
+			$errorbun = "Bun required";
 		}
-		else{
-			$showform1 = false;
-			$showform2 = true;
-		}
-	}
-	
-	if(isset($_POST["submit3"])){
-		$price = $_POST["price"];
-		$brgr = $_POST["brgr"];
-		$bun = $_POST["bun"];
+		
 		if(isset($_POST["cheese"])){
 			$c = $_POST["cheese"];
 			if(count($c) > 0){
@@ -81,17 +66,7 @@
 		else{
 			$cheese = null;
 		}
-		$showform1 = false;
-		$showform2 = false;
-		$showform3 = false;
-		$showform4 = true;
-	}
-	
-	if(isset($_POST["submit4"])){
-		$price = $_POST["price"];
-		$brgr = $_POST["brgr"];
-		$bun = $_POST["bun"];
-		$cheese = $_POST["cheese"];
+		
 		if(isset($_POST["premium"])){
 			$pr = $_POST["premium"];
 			if(count($pr) > 0){
@@ -108,19 +83,7 @@
 		else{
 			$premium = null;
 		}
-		$showform1 = false;
-		$showform2 = false;
-		$showform3 = false;
-		$showform4 = false;
-		$showform5 = true;
-	}
-	
-	if(isset($_POST["submit5"])){
-		$price = $_POST["price"];
-		$brgr = $_POST["brgr"];
-		$bun = $_POST["bun"];
-		$cheese = $_POST["cheese"];
-		$premium = $_POST["premium"];
+		
 		if(isset($_POST["basic"])){
 			$b = $_POST["basic"];
 			if(count($b) > 0){
@@ -137,22 +100,7 @@
 		else{
 			$basic = null;
 		}
-		$showform1 = false;
-		$showform2 = false;
-		$showform3 = false;
-		$showform4 = false;
-		$showform5 = false;
-		$showform6 = true;
-
-	}
-	
-	if(isset($_POST["submit6"])){
-		$price = $_POST["price"];
-		$brgr = $_POST["brgr"];
-		$bun = $_POST["bun"];
-		$cheese = $_POST["cheese"];
-		$premium = $_POST["premium"];
-		$basic = $_POST["basic"];
+		
 		if(isset($_POST["sauce"])){
 			$s = $_POST["sauce"];
 			if(count($s) > 0){
@@ -170,17 +118,14 @@
 			$sauce = null;
 		}
 		
-		$b = new Burger($brgr, $bun, $cheese, $premium, $basic, $sauce, 1, $price);
-		array_push($_SESSION["tray"], $b);
-		$_SESSION["traycontents"]++;
-		$_SESSION["subtotal"]+=$price;
+		if($brgr!='' && $bun!=''){
+			$b = new Burger($brgr, $bun, $cheese, $premium, $basic, $sauce, 1, $price);
+			array_push($_SESSION["tray"], $b);
+			$_SESSION["traycontents"]++;
+			$_SESSION["subtotal"]+=$price;
+			header("Location: tray.php");
+		}
 		
-		$showform1 = false;
-		$showform2 = false;
-		$showform3 = false;
-		$showform4 = false;
-		$showform5 = false;
-		$showform6 = false;
 	}
 	
 ?>
@@ -201,7 +146,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -223,136 +169,104 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 				
 			</div>
 			
-			<br/><br/><br/>
+			<br/><br/>
+		
+			<img src="images/customburger.png"/>
+		
+			<table class="createtable">
+			<form name="createburger" action="create.php" method="POST">
 			
-			<?php if($showform1){ ?>
-			<form name="choosebrgr" action="create.php" method="POST">
-			<h1>STEP 1: CHOOSE A BRGR</h1><br/>
+			<tr><td colspan="2">
+			<h1>STEP 1: CHOOSE A BRGR * <?php if($errorbrgr!='') echo $errorbrgr; ?></h1>
+			<center>
 			<?php
 				$query = "select * from product where ptype='brgr'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 				while($row=pg_fetch_row($result)){
-					echo '<input type="radio" name="brgr" value="'.$row[0].'"/> '.$row[0].'<br/>';
+					echo '<input type="radio" name="brgr" value="'.$row[0].'"/> '.$row[0].' (P'.$row[1].') ';
 				}
-			?>	
-			<br/>
-			<input type="submit" name="submit1" value="Next"/>
-			</form>
-			<?php } ?>
+			?>
+			</center><br/>
+			</td></tr>
 			
-			<?php if($showform2){ ?>
-			<form name="choosebun" action="create.php" method="POST">
-			<h1>STEP 2: CHOOSE A BUN</h1><br/>
+			<tr><td colspan="2">
+			<h1>STEP 2: CHOOSE A BUN * <?php if($errorbun!='') echo $errorbun; ?></h1>
+			<center>
 			<?php
 				$query = "select * from product where ptype='bun'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 				while($row=pg_fetch_row($result)){
-					echo '<input type="radio" name="bun" value="'.$row[0].'"/> '.$row[0].'<br/>';
+					echo '<input type="radio" name="bun" value="'.$row[0].'"/> '.$row[0].' (P'.$row[1].') ';
 				}
 			?>
-			<br/>
-			<input type="hidden" name="price" value="<?php echo $price; ?>"/>
-			<input type="hidden" name="brgr" value="<?php echo $brgr; ?>"/>
-			<input type="submit" name="submit2" value="Next"/>
-			</form>
-			<?php } ?>
+			</center><br/>
+			</td></tr>
 		
-			<?php if($showform3){ ?>
-			<form name="choosecheese" action="create.php" method="POST">
-			<h1>STEP 3: CHOOSE A CHEESE</h1><br/>
+			<tr><td>
+			<h1>STEP 3: CHOOSE A CHEESE</h1>
 			<?php
 				$query = "select * from product where ptype='cheese'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 				while($row=pg_fetch_row($result)){
-					echo '<input type="checkbox" name="cheese[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
+					echo '<input type="checkbox" name="cheese[]" value="'.$row[0].'"/> '.$row[0].'(P'.$row[1].') <br/>';
 				}
 			?>
-			<br/>
-			<input type="hidden" name="price" value="<?php echo $price; ?>"/>
-			<input type="hidden" name="brgr" value="<?php echo $brgr; ?>"/>
-			<input type="hidden" name="bun" value="<?php echo $bun; ?>"/>
-			<input type="submit" name="submit3" value="Next"/>
-			</form>
-			<?php } ?>
-			
-			<?php if($showform4){ ?>
-			<form name="choosepremium" action="create.php" method="POST">
-			<h1>STEP 4: CHOOSE YOUR PREMIUM TOPPINGS</h1><br/>
+			</td>
+			<td>
+			<h1>STEP 4: CHOOSE YOUR PREMIUM TOPPINGS</h1>
 			<?php
 				$query = "select * from product where ptype='premium'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 				while($row=pg_fetch_row($result)){
-					echo '<input type="checkbox" name="premium[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
+					echo '<input type="checkbox" name="premium[]" value="'.$row[0].'"/> '.$row[0].'(P'.$row[1].') <br/>';
 				}
 			?>
-			<br/>
-			<input type="hidden" name="price" value="<?php echo $price; ?>"/>
-			<input type="hidden" name="brgr" value="<?php echo $brgr; ?>"/>
-			<input type="hidden" name="bun" value="<?php echo $bun; ?>"/>
-			<input type="hidden" name="cheese" value="<?php echo $cheese; ?>"/>
-			<input type="submit" name="submit4" value="Next"/>
-			</form>
-			<?php } ?>
+			</td></tr>
 			
-			<?php if($showform5){ ?>
-			<form name="choosebasic" action="create.php" method="POST">
-			<h1>STEP 5: CHOOSE YOUR BASIC TOPPINGS</h1><br/>
+			<tr><td>
+			<h1>STEP 5: CHOOSE YOUR BASIC TOPPINGS</h1>
 			<?php
 				$query = "select * from product where ptype='basic'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 				while($row=pg_fetch_row($result)){
-					echo '<input type="checkbox" name="basic[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
+					echo '<input type="checkbox" name="basic[]" value="'.$row[0].'"/> '.$row[0].'(P'.$row[1].') <br/>';
 				}
 			?>
-			<br/>
-			<input type="hidden" name="price" value="<?php echo $price; ?>"/>
-			<input type="hidden" name="brgr" value="<?php echo $brgr; ?>"/>
-			<input type="hidden" name="bun" value="<?php echo $bun; ?>"/>
-			<input type="hidden" name="cheese" value="<?php echo $cheese; ?>"/>
-			<input type="hidden" name="premium" value="<?php echo $premium; ?>"/>
-			<input type="submit" name="submit5" value="Next"/>
-			</form>
-			<?php } ?>
-			
-			<?php if($showform6){ ?>
-			<form name="choosesauce" action="create.php" method="POST">
-			<h1>STEP 6: CHOOSE A SAUCE</h1><br/>
+			</td>
+			<td>
+			<h1>STEP 6: CHOOSE A SAUCE</h1>
 			<?php
 				$query = "select * from product where ptype='sauce'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
 				while($row=pg_fetch_row($result)){
-					echo '<input type="checkbox" name="sauce[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
+					echo '<input type="checkbox" name="sauce[]" value="'.$row[0].'"/> '.$row[0].'(P'.$row[1].') <br/>';
 				}
 			?>			
-			<br/>
-			<input type="hidden" name="price" value="<?php echo $price; ?>"/>
-			<input type="hidden" name="brgr" value="<?php echo $brgr; ?>"/>
-			<input type="hidden" name="bun" value="<?php echo $bun; ?>"/>
-			<input type="hidden" name="cheese" value="<?php echo $cheese; ?>"/>
-			<input type="hidden" name="premium" value="<?php echo $premium; ?>"/>
-			<input type="hidden" name="basic" value="<?php echo $basic; ?>"/>
-			<input type="submit" name="submit6" value="Finish"/>
-			</form>
-			<?php } ?>
+			</td></tr>
 			
-			<?php 
-				if(!$showform1 && !$showform2 && !$showform3 && !$showform4 && !$showform5 && !$showform6){
-					echo "Custom burger added to tray";
-				}
-			?>
+			<tr><td colspan="2">
+			<center><input type="submit" name="submitburger" value="Finish"/></center>
+			</td></tr>
+			
+			</form>
+			</table>
 			
 		</div>
+	
+		<br/>
 	
 	</div>
 	</center>
 
+	<br/>
+	
 </body>
 
 </html>

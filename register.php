@@ -4,6 +4,19 @@
 
 	require_once("./include/membersite_config.php");
 	
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
+	//Check if user is logged in
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+	}
+	
 	if($_SESSION["login"]==1){
 		header("Location: index.php");
 	}
@@ -45,7 +58,6 @@
 	}
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
 	<head>
 	    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
@@ -68,7 +80,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -90,7 +103,7 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>

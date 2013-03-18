@@ -4,6 +4,19 @@
 	session_start();
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
+	//Check if user is logged in
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+	}
+	
 	//ORDER
 	if(isset($_POST["submit"])){
 	
@@ -78,10 +91,6 @@
 		header("Location:tray.php");
 	}
 	
-	if(isset($_POST["create"])){
-		header("Location: create.php");
-	}
-	
 ?>
 <html>
 
@@ -100,7 +109,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -122,20 +132,26 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 				
 			</div>
 			
-			<br/><br/><br/>
+			<br/><br/>
 			
 			<table class="menutable"><tr>
 			<form name="menuform" action="menu.php" method="POST">
 		
-			<td>
-			<h1>DESIGNR BRGRS</h1><br/>
+			<td class="menupics">
+				<img src="images/menu/1.jpg"/><img src="images/menu/2.jpg"/><br/>
+				<img src="images/menu/3.jpg"/><img src="images/menu/4.jpg"/><br/>
+				<img src="images/menu/5.jpg"/><img src="images/menu/6.jpg"/><br/>
+			</td>
+		
+			<td style="border-left: 3px solid black; padding-left: 5px;">
+			<h1>DESIGNR BRGRS</h1>
 			<?php
 				$query = "select * from product where ptype='premade'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
@@ -143,10 +159,10 @@
 					echo '<input type="checkbox" name="premade[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-			</td>
-		
-			<td>
-			<h1>SIDES</h1><br/>	
+
+			<br/>
+			
+			<h1>SIDES</h1>	
 			<?php
 				$query = "select * from product where ptype='sides'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
@@ -154,10 +170,10 @@
 					echo '<input type="checkbox" name="sides[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-			</td>
-
-			<td>
-			<h1>MILKSHAKES</h1><br/>
+			
+			<br/>
+			
+			<h1>MILKSHAKES</h1>
 			<?php
 				$query = "select * from product where ptype='milkshake'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
@@ -165,10 +181,10 @@
 					echo '<input type="checkbox" name="milkshake[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-			</td>
 			
-			<td>
-			<h1>BEVERAGES</h1><br/>
+			<br/>
+			
+			<h1>BEVERAGES</h1>
 			<?php
 				$query = "select * from product where ptype='beverage'";
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());	
@@ -176,36 +192,26 @@
 					echo '<input type="checkbox" name="beverage[]" value="'.$row[0].'"/> '.$row[0].'<br/>';
 				}
 			?>
-			</td>
+			
+			<hr style="border-bottom: 1px solid black;"/>
+			
+			<center>
+				<input type="submit" name="submit" value="Add items to tray"/>
+			</center>
 			
 			</tr>
-			
-			<tr><td colspan="4"><center>
-				<input style="width: 200px;" type="submit" name="submit" value="Add items to tray"/><br/>
-				<input style="width: 200px;" type="submit" name="create" value="Create custom burger"/><br/>
-			</center></td></tr>
-			
-			<tr>
-				<td class="menupic" colspan="2"><img src="images/menu/1.jpg"/></td>
-				<td class="menupic" colspan="2"><img src="images/menu/2.jpg"/></td>
-			</tr>
-			<tr>
-				<td class="menupic" colspan="2"><img src="images/menu/3.jpg"/></td>
-				<td class="menupic" colspan="2"><img src="images/menu/4.jpg"/></td>
-			</tr>
-			<tr>
-				<td class="menupic" colspan="2"><img src="images/menu/5.jpg"/></td>
-				<td class="menupic" colspan="2"><img src="images/menu/6.jpg"/></td>
-			</tr>
-			
 			</form>				
 			</table>
 			
+			<a href="create.php"><div class="customlink"></div></a>
+			
 		</div>
+	
+		<br/>
 	
 	</div>
 	</center>
-
+	
 </body>
 
 </html>

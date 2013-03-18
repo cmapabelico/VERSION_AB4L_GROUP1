@@ -13,6 +13,19 @@
 	$points= 0;
 	$var = 0;
 	
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
+	//Check if user is logged in
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+		header("Location: tray.php");
+	}
 	
 	//Get user details from database
 	$query = "select * from member where email='".$_SESSION["id"]."'";
@@ -47,9 +60,6 @@
 		header('location:checkout.php');
 		
 	}
-		
-		
-	
 	
 	if(isset($_POST["update"])){
 		$upoints = $_POST["points"];
@@ -82,7 +92,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">

@@ -8,10 +8,13 @@
 	
 	$_SESSION["login"]=0;
 	$_SESSION["id"]=null;
+	$_SESSION["tray"] = array();
+	$_SESSION["traycontents"] = 0;
+	$_SESSION["subtotal"] = 0;
 	
 	//LOG IN
 	if(isset($_POST["log"])){
-		
+	
 		$email = $_POST["loginemail"];
 		$password = md5($_POST["loginpword"]);
 		
@@ -42,16 +45,23 @@
 	}
 	
 ?>
-<!DOCTYPE html>
 <html>
+
 <head>
 	<title>BRGR: The Burger Project Online</title>
-	<script src="bootstrapjs/jquery-1.9.1.js"></script>
-	<script src="bootstrapjs/bootstrap-carousel.js"></script>
-	<script src="bootstrapjs/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="bootstrap.css/bootstrap.min.css" type="text/css"/>
-	<link rel="stylesheet" href="bootstrap.css/bootstrap-responsive.min.css" type="text/css"/>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="jquery.jcarousel.min.js"></script>
+	<script type="text/javascript">	
+		$(function(){
+			$('#mycarousel img:gt(0)').hide();
+				setInterval(function() {
+				$('#mycarousel :first-child') .fadeOut(1000)
+				.next('img').fadeIn(1000)
+				.end().appendTo('#mycarousel');
+			}, 3000);
+		});
+	</script>
 </head>
 
 <body>
@@ -64,7 +74,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -84,30 +95,26 @@
 					<a href="logout.php">Log out</a><br/>
 				<?php }
 					else{
-						echo 'Welcome guest! <a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
+						echo 'Welcome guest! ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 			</div>
 			
-			<!--FLASH-->
-			<div class="flash">
-					<div id="myCarousel" class="carousel slide">
-					  <ol class="carousel-indicators">
-						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-						<li data-target="#myCarousel" data-slide-to="1"></li>
-						<li data-target="#myCarousel" data-slide-to="2"></li>
-					  </ol>
-					  <!-- Carousel items -->
-					  <div class="carousel-inner">
-						<div class="active item"><img src="http://farm5.static.flickr.com/4137/4892659065_588f2bc841.jpg" alt></div>
-						<div class="item"><img src="http://www.juice.ph/cms_images/2016/The%20Burger%20Project.jpeg" alt></div>
-						<div class="item"><img src="http://upjma.com/images/part07-1.jpg" alt></div>
-					  </div>
-					  <!-- Carousel nav -->
-					  <a class="carousel-control left" href="#myCarousel" data-slide="prev"><</a>
-					  <a class="carousel-control right" href="#myCarousel" data-slide="next">></a>
-					</div>
+			<!--content starts here-->
+			
+			<br/>
+			
+			<div id="mycarousel">
+				<img src="images/carousel/1.jpg"/>
+				<img src="images/carousel/2.jpg"/>
+				<img src="images/carousel/3.jpg"/>
+				<img src="images/carousel/4.jpg"/>
+				<img src="images/carousel/5.jpg"/>
 			</div>
+			
+			<br/>
 			
 			<!--DESCRIPTION-->
 			What do you want in your burger? Create your own at "BRGR: The Burger Project!" <br/><br/>
@@ -120,8 +127,9 @@
 			</form>
 			<?php if($error!='') echo $error.'<br/><br/>'; ?>
 			<a href="register.php">Register</a> <a href="home.php">Proceed as guest</a>
-
+			
 		</div>
+	
 	</div>
 	</center>
 

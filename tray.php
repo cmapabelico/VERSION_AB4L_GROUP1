@@ -4,6 +4,19 @@
 	session_start();
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
+	//Check if user is logged in
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+	}
+	
 	//UPDATE QUANTITY
 	for($i=0;$i<count($_SESSION["tray"]);$i++){
 		if(isset($_POST["update$i"])){
@@ -51,7 +64,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -73,7 +87,7 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>

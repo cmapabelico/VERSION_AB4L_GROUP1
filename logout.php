@@ -5,6 +5,7 @@
 	
 	$_SESSION["login"] = 0;
 	$_SESSION["id"] = null;
+	$_SESSION["tray"] = array();
 	$_SESSION["traycontents"] = 0;
 	$_SESSION["subtotal"] = 0;
 	

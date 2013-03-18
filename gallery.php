@@ -5,8 +5,20 @@
 	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 	
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
+	//Check if user is logged in
+	if($_SESSION["login"]!=1){
+		$_SESSION["id"]=null; //guest
+		if(!isset($_SESSION["tray"])) $_SESSION["tray"] = array(); //user tray
+		if(!isset($_SESSION["traycontents"])) $_SESSION["traycontents"] = 0; //number of items in tray
+		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
+	}
+	
 ?>
-<!DOCTYPE html>
 <html>
 <head>
 	<title>BRGR: The Burger Project Online</title>
@@ -23,7 +35,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -44,16 +57,17 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
 			</div>
 			
-			<br/><br/><br/>
+			<br/><br/>
+			
+			<img src="images/gallery.png"/>
 			
 			<table>
-			
 				<tr>
 					<td><img class="gallery" src="images/gallery/1.jpg"/></td>
 					<td><img class="gallery" src="images/gallery/2.jpg"/></td>
@@ -74,13 +88,15 @@
 					<td><img class="gallery" src="images/gallery/9.jpg"/></td>
 					<td><img class="gallery" src="images/gallery/10.jpg"/></td>
 				</tr>
-			
-			
 			</table>
+			
+			<br/>
 
 		</div>
 	</div>
 	</center>
+	
+	<br/>
 
 </body>
 

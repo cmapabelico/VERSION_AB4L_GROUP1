@@ -5,6 +5,11 @@
 	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
 
+	//For guest user
+	if(!isset($_SESSION["login"])){
+		$_SESSION["login"] = 0;
+	}
+	
 	//Check if user is logged in
 	if($_SESSION["login"]!=1){
 		$_SESSION["id"]=null; //guest
@@ -19,6 +24,18 @@
 <head>
 	<title>BRGR: The Burger Project Online</title>
 	<link rel="stylesheet" href="style.css" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="jquery.jcarousel.min.js"></script>
+	<script type="text/javascript">	
+		$(function(){
+			$('#mycarousel img:gt(0)').hide();
+				setInterval(function() {
+				$('#mycarousel :first-child') .fadeOut(1000)
+				.next('img').fadeIn(1000)
+				.end().appendTo('#mycarousel');
+			}, 3000);
+		});
+	</script>
 </head>
 
 <body>
@@ -31,7 +48,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -52,7 +70,7 @@
 				<?php }
 					else{
 						echo 'Welcome guest! ';
-						if(isset($_SESSION["traycontents"]) && $_SESSION["traycontents"] > 0) echo '<a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
+						if(isset($_SESSION["traycontents"]) && isset($_SESSION["traycontents"])) echo '| <a href="tray.php">Tray ('.$_SESSION["traycontents"].') | ';
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
@@ -60,7 +78,17 @@
 			
 			<!--content starts here-->
 			
+			<br/>
 			
+			<div id="mycarousel">
+				<img src="images/carousel/1.jpg"/>
+				<img src="images/carousel/2.jpg"/>
+				<img src="images/carousel/3.jpg"/>
+				<img src="images/carousel/4.jpg"/>
+				<img src="images/carousel/5.jpg"/>
+			</div>
+			
+			<br/>
 			
 		</div>
 	

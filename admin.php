@@ -4,6 +4,10 @@
 	
 	//Connect to database
 	$dbconn = pg_connect("host=localhost port=5432 dbname=TBP user=postgres password=password");
+
+	if($_SESSION["id"]!='theburgerproject@gmail.com'){
+		header("Location:index.php");
+	}
 	
 ?>
 
@@ -24,7 +28,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
@@ -49,13 +54,15 @@
 				?>
 			</div>
 			
-			<br/><br/><br/>
+			<br/>
 			
 			<a id="adminproducts" href="product.php"><img src="images/admin_products.jpg"/></a> 			
 			<a id="adminmembers" href="member.php"><img src="images/admin_members.jpg"/></a>
-			<a id="adminsummary" href="summary.php"><img src="images/admin_summary.jpg"/></a><br/>
-			<a href="order.php">View Pending Orders	</a><br/>
-			<a href="clearedorder.php">View Cleared Orders	</a><br/>
+			<a id="adminsummary" href="summary.php"><img src="images/admin_summary.jpg"/></a>
+			<br/>
+			<a id="adminmembers" href="order.php"><img src="images/admin_pendingorders.jpg"/></a>
+			<a id="adminmembers" href="clearedorder.php"><img src="images/admin_clearedorders.jpg"/></a>
+			
 			<br/>
 			
 		</div>

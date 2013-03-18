@@ -9,10 +9,12 @@
 	$print2 = '';
 	$date = '';
 	$value = '';
+	
 	//If user is not admin, redirect to home page
 	if($_SESSION["id"]!='theburgerproject@gmail.com'){
-		header("Location:home.php");
+		header("Location:index.php");
 	}
+	
 	//Gross Income
 	
 	//highestday
@@ -154,7 +156,8 @@
 			<a href="home.php">Home</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="menu.php">Menu</a> &nbsp &nbsp &nbsp &nbsp &nbsp
 			<a href="gallery.php">Gallery</a> &nbsp &nbsp &nbsp &nbsp &nbsp
-			<a href="contact.php">Contact Us</a>
+			<a href="contact.php">Contact Us</a> &nbsp &nbsp &nbsp &nbsp &nbsp
+			<a href="help.php">Help</a>
 		</div>
 	
 		<div class="content">
