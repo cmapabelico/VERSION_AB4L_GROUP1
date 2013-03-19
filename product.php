@@ -190,12 +190,12 @@
 				?>
 			</div>
 			
-			<br/><br/><br/>
+			<br/>
 			
-			<?php if($update) echo '<b>PRODUCTS LIST UPDATED</b><br/><br/>'; ?>	
+			<?php if($update) echo '<text class="error">PRODUCTS LIST UPDATED</text><br/><br/>'; ?>	
 			
 			<!--ADD PRODUCT FORM-->
-			Add Product<br/><br/>
+			<h2>Add Product</h2>
 			<table class="addprodtable">
 			<form name="addform" action="product.php" method="POST">
 				<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="name" placeholder="Name" value="<?php if(isset($name))echo $name;?>"/></td>
@@ -235,11 +235,11 @@
 			</form>
 			</table>
 			
-			<br/><br/><br/>
+			<br/>
 			
 			<!--EDIT PRODUCT FORM-->
 			<?php if($showeditform){ ?>
-				Edit Product<br/>
+				<h2>Edit Product</h2>
 				<table class="addprodtable">
 				<form name="editform" action="product.php" method="POST">
 					<tr><td style="text-align: right; font-weight: bold;">Product name</td><td><input type="text" name="pname" placeholder="Name" <?php if($pname!=null) echo 'value="'.$pname.'"'; ?>/></td>
@@ -280,12 +280,11 @@
 					<input type="hidden" name="oldname" value="<?php echo $p; ?>"/>
 				</form>
 				</table>
-				
-				<br/><br/><br/>
+				<br/>
 			<?php } ?>
 			
 			<!--PRODUCTS LIST-->
-			Products List<br/><br/>
+			<h2>List of Products</h2>
 			
 			<table class="prodtable">
 			<form name="prodform" action="product.php" method="POST">
@@ -305,6 +304,8 @@
 			?>
 			</form>
 			</table>
+			
+			<br/>
 			
 		</div>
 	

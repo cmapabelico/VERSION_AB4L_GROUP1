@@ -249,16 +249,16 @@
 					<tr><td colspan="2">
 						<center><b>
 							<?php
-								if($error1!="") echo $error1."<br/>";
-								if($error2!="") echo $error2."<br/>";
-								if($error3!="") echo $error3."<br/>";
-								if($error4!="") echo $error4."<br/>";
-								if($error5!="") echo $error5."<br/>";
-								if($error6!="") echo $error6."<br/>";
-								if($error7!="") echo $error7."<br/>";
-								if($error8!="") echo $error8."<br/>";
-								if($error9!="") echo $error9."<br/>";
-								if($update) echo 'Account settings saved';
+								if($error1!="") echo '<text class="error">'.$error1.'<br/>';
+								if($error2!="") echo '<text class="error">'.$error2.'<br/>';
+								if($error3!="") echo '<text class="error">'.$error3.'<br/>';
+								if($error4!="") echo '<text class="error">'.$error4.'<br/>';
+								if($error5!="") echo '<text class="error">'.$error5.'<br/>';
+								if($error6!="") echo '<text class="error">'.$error6.'<br/>';
+								if($error7!="") echo '<text class="error">'.$error7.'<br/>';
+								if($error8!="") echo '<text class="error">'.$error8.'<br/>';
+								if($error9!="") echo '<text class="error">'.$error9.'<br/>';
+								if($update) echo '<text class="error">Account settings saved</text>';
 							?>
 						</b></center>
 						<br/><br/><br/>

@@ -44,6 +44,16 @@
 		}
 	}
 	
+	//REGISTER
+	if(isset($_POST["reg"])){
+		header("Location:register.php");
+	}
+	
+	//PROCEED AS GUEST
+	if(isset($_POST["guest"])){
+		header("Location:home.php");
+	}
+	
 ?>
 <html>
 
@@ -119,15 +129,28 @@
 			<!--DESCRIPTION-->
 			What do you want in your burger? Create your own at "BRGR: The Burger Project!" <br/><br/>
 			
+			<hr style="border: 1px solid black"/><br/>
+			
 			<!--FORM-->
 			<form name="loginform" action="index.php" method="POST">
-				<input type="text" name="loginemail" placeholder="Email" value="<?php if(!empty($email)) echo $email; ?>"/>
-				<input type="password" name="loginpword" placeholder="Password"/> 
-				<input type="submit" name="log" value="Log in"/>
-			</form>
-			<?php if($error!='') echo $error.'<br/><br/>'; ?>
-			<a href="register.php">Register</a> <a href="home.php">Proceed as guest</a>
 			
+				<table class="logintable">
+				
+				<tr>
+					<td rowspan="3" class="input">
+						<input type="text" name="loginemail" placeholder="Email" value="<?php if(!empty($email)) echo $email; ?>"/><br/>
+						<input type="password" name="loginpword" placeholder="Password"/>
+						<?php if($error!='') echo '<br/><center><text class="error">'.$error.'<br/></text></center>'; ?>
+					</td>
+					<td><input type="submit" name="log" value="Log in"/></td>
+				</tr>
+				<tr><td><input type="submit" name="reg" value="Register"/></td></tr>
+				<tr><td><input type="submit" name="guest" value="Proceed as guest"/></td></tr>
+			
+				</table>
+			
+			</form>
+
 		</div>
 	
 	</div>

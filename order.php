@@ -101,7 +101,7 @@
 					$row = pg_fetch_row($result);	
 				?>
 					You are logged in as <?php echo $row[2]." ".$row[3]; ?> | 
-					<a href="edit.php">Edit</a> | 
+					<a href="edit.php">Profile</a> | 
 					<?php
 						if($_SESSION["id"]=='theburgerproject@gmail.com') echo '<a href="admin.php">Admin</a> | ';
 						else echo '<a href="tray.php">Tray</a> | ';
@@ -114,35 +114,35 @@
 				?>
 			</div>
 			
-			<br/><br/><br/>
+			<br/>
 			
 			<?php if($vieworder){  ?>
 			
-				<table>
-					<tr><td>Order id</td><td><?php echo $order_id; ?></td></tr>
-					<tr><td>Date created</td><td><?php echo $date_created; ?></td></tr>
-					<tr><td>Date cleared</td><td><?php echo $date_cleared; ?></td></tr>
-					<tr><td>Order type</td><td><?php echo $otype; ?></td></tr>
-					<tr><td>Customer email</td><td><?php echo $email; ?></td></tr>
-					<tr><td>Items</td><td><?php echo $items; ?></td></tr>
-					<tr><td>Total number of items</td><td><?php echo $num_items; ?></td></tr>
-					<tr><td>Subtotal</td><td><?php echo $subtotal; ?></td></tr>
-					<tr><td>Cash</td><td><?php echo $cash; ?></td></tr>
-					<tr><td>Status</td><td><?php echo $status; ?></td></tr>
+				<h2>Viewing information for order ID <?php echo $order_id; ?></h2>
+				<table class="viewtable">
+					<tr><td class="viewtitle">Order id</td><td><?php echo $order_id; ?></td></tr>
+					<tr><td class="viewtitle">Date created</td><td><?php echo $date_created; ?></td></tr>
+					<tr><td class="viewtitle">Date cleared</td><td><?php echo $date_cleared; ?></td></tr>
+					<tr><td class="viewtitle">Order type</td><td><?php echo $otype; ?></td></tr>
+					<tr><td class="viewtitle">Customer email</td><td><?php echo $email; ?></td></tr>
+					<tr><td class="viewtitle">Items</td><td><?php echo $items; ?></td></tr>
+					<tr><td class="viewtitle">Total number of items</td><td><?php echo $num_items; ?></td></tr>
+					<tr><td class="viewtitle">Subtotal</td><td><?php echo $subtotal; ?></td></tr>
+					<tr><td class="viewtitle">Cash</td><td><?php echo $cash; ?></td></tr>
+					<tr><td class="viewtitle">Status</td><td><?php echo $status; ?></td></tr>
 				</table>
-			
-				<br/><br/><br/>
+				<br/>
 			
 			<?php } ?>
 			
 			<?php if($update){
-				echo "<b>ORDER LIST UPDATED</b><br/><br/>"; 
-				echo "<b>CLEARED ORDER LIST UPDATED</b><br/><br/>";
+				echo '<text class="error">ORDER LIST UPDATED</text><br/>'; 
+				echo '<text class="error">CLEARED ORDER LIST UPDATED</text><br/>';
 				}
 			?>
 			
 			<!--ORDER LIST-->
-			ORDERS List<br/><br/>
+			<h2>List of Orders</h2>
 			
 			<table class="prodtable">
 			<form name="orderform" action="order.php" method="POST">

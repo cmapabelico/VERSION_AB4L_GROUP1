@@ -89,6 +89,7 @@
 			</div>
 			
 			<br/>
+			What do you want in your burger? Create your own at "BRGR: The Burger Project!" <br/><br/>
 			
 		</div>
 	

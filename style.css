@@ -37,10 +37,6 @@ div.nav a:hover{
 	color: #f7921c;
 }
 
-div.nav a.current{
-	color: #f7921c;
-}
-
 div.content{
 	border: none;
 	width: 700px;
@@ -73,6 +69,10 @@ div.flash{
 
 a:link, a:active, a:visited{
 	text-decoration: none;
+}
+
+a:hover{
+	text-decoration: underline;
 }
 
 table.editformtable{
@@ -165,4 +165,81 @@ table.createtable td{
 	vertical-align: top;
 	padding: 10px;
 	border: 1px solid black;
+}
+
+table.logintable{
+	width: 500px;
+	border:  none;
+	padding: 0px;
+	margin: 0px;
+}
+
+table.logintable td{
+	vertical-align: top;
+	padding: 0px;
+	margin: 0px;
+}
+
+table.logintable td input{
+	width: 150px;
+	padding: 1px;
+	margin: 0px;
+}
+
+table.logintable td.input{
+	width: 350px;
+}
+
+table.logintable td.input input{
+	width: 350px;
+	height: 28px;
+	padding: 2px;
+	margin: 3px;
+	border-radius: 4px;
+}
+
+text.error{
+	color: red;
+	font-weight: bold;
+}
+
+table.viewtable td{
+	padding: 3px;
+	background-color: #e1e1e1;
+	width: 300px;
+}
+
+table.viewtable td.viewtitle{
+	text-align: right;
+	font-weight: bold;
+	padding-right: 5px;
+	background-color: #ffffff;
+	width: 120px;
+}
+
+h2{
+	font-size: 14px;
+	border-bottom: 2px solid black;
+	border-top: 2px solid black;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+table.traytable{
+	width: 450px;
+}
+
+table.traytable td{
+	padding: 3px;
+}
+
+table.traytable td.title{
+	width: 200px;
+	text-align: right;
+	font-weight: bold;
+}
+
+table.traytable td input{
+	width: 250px;
+	padding: 2px;
 }

@@ -17,6 +17,8 @@
 		if(!isset($_SESSION["subtotal"])) $_SESSION["subtotal"] = 0; //total price due
 	}
 	
+	$update = false;
+	
 	//UPDATE QUANTITY
 	for($i=0;$i<count($_SESSION["tray"]);$i++){
 		if(isset($_POST["update$i"])){
@@ -32,6 +34,7 @@
 				//Update subtotal
 				$_SESSION["subtotal"]-=($prevqty * $price);
 				$_SESSION["subtotal"]+=($newqty * $price);
+				$update = true;
 			}
 			else if($newqty==0){	
 				//Remove item from tray
@@ -42,6 +45,7 @@
 				$_SESSION["traycontents"]-=$prevqty;
 				//Update subtotal
 				$_SESSION["subtotal"]-=($prevqty * $price);
+				$update = true;
 			}
 		}
 	}
@@ -70,7 +74,6 @@
 	
 		<div class="content">
 			<div class="user">
-				
 				<?php
 				if($_SESSION["id"]!=null){
 					$query = "select * from member where email='".$_SESSION["id"]."';";
@@ -91,14 +94,19 @@
 						echo '<a href="index.php">Log in</a> or <a href="register.php">Sign up</a>';
 					}
 				?>
-				
 			</div>
 			
-			<br/><br/><br/>
+			<br/><br/>
 			
 			<?php if($_SESSION["traycontents"]>0){ ?>
+				<b>*If you would like to change the quantity of the item, click the check button.</b><br/>
+				<b>*To remove an item, set quantity to 0.</b><br/>
 				
-					<table class="traytable" cellspacing="0" cellpadding="0">
+				<h2>User Tray</h2>
+				
+				<?php if($update) echo '<text class="error">* Tray has been updated</text><br/><br/>';?>
+				
+					<table class="traytable">
 					<form name="form" action="tray.php" method="post">
 						
 						<tr class="th">
@@ -133,10 +141,10 @@
 								?>
 							</td>
 							<td>
-								<input type="number" min="0" name="quantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/> 
+								<input type="number" min="0" name="quantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>" style="width: 100px;"/> 
 								<input type="hidden" name="prevquantity<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->qty; ?>"/>
 								<input type="hidden" name="prodprice<?php echo $i; ?>" value="<?php echo $_SESSION["tray"][$i]->price; ?>"/>
-								<input type="submit" name="update<?php echo $i; ?>" value="&#10003;"/>
+								<input type="submit" name="update<?php echo $i; ?>" value="&#10003;" style="width: 50px;"/>
 							</td>
 							<td><?php echo $_SESSION["tray"][$i]->price * $_SESSION["tray"][$i]->qty; ?></td>
 						</tr>
@@ -148,8 +156,8 @@
 						<!-- Subtotal -->
 						<tr class="th">
 							<td id="empty"></td>
-							<td><b>Subtotal</b></td>
-							<td><?php  echo $_SESSION["subtotal"]; ?></td>
+							<td style="text-align: right; padding-right: 10px;"><b>Subtotal</b></td>
+							<td style="background-color: e1e1e1; padding: 5px; width: 50px;" ><?php  echo $_SESSION["subtotal"]; ?></td>
 						</tr>
 					</table>
 					
