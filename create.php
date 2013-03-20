@@ -184,7 +184,7 @@
 			<form name="createburger" action="create.php" method="POST">
 			
 			<tr><td colspan="2">
-			<h1>STEP 1: CHOOSE A BRGR * <?php if($errorbrgr!='') echo $errorbrgr; ?></h1>
+			<h1>STEP 1: CHOOSE A BRGR * <?php if($errorbrgr!='') echo '<text class="error">'.$errorbrgr.'</text>'; ?></h1>
 			<center>
 			<?php
 				$query = "select * from product where ptype='brgr'";
@@ -197,7 +197,7 @@
 			</td></tr>
 			
 			<tr><td colspan="2">
-			<h1>STEP 2: CHOOSE A BUN * <?php if($errorbun!='') echo $errorbun; ?></h1>
+			<h1>STEP 2: CHOOSE A BUN * <?php if($errorbun!='') echo '<text class="error">'.$errorbun.'</text>'; ?></h1>
 			<center>
 			<?php
 				$query = "select * from product where ptype='bun'";

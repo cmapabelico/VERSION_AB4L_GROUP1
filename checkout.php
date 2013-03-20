@@ -44,7 +44,7 @@
 		
 		$payment = $_POST["payment"];
 		if($payment < $_SESSION["subtotal"]){
-			$error = "Insufficient payment";
+			$error = "* Insufficient payment";
 		}
 		else{
 			$showform1 = false;
@@ -84,7 +84,7 @@
 		$order_id = rand(0001, 9999);
 		$_SESSION['order_id'] = $order_id;
 		
-		echo $_SESSION['order_id'];
+		//echo $_SESSION['order_id'];
 		
 		$date_created = date("Y-m-d H:i:s");
 		$date_cleared = '';
@@ -121,7 +121,7 @@
 			$password = md5($_POST["password"]);
 		
 			if($password!=$pw){
-				$error = "Wrong password";
+				$error = "* Wrong password";
 				$showform1 = false;
 				$showform2 = false;
 				$showform3 = true;
@@ -131,7 +131,7 @@
 				$showform2 = false;
 				$showform3 = false;
 		
-				$msg = "Congratulations!";
+				$msg = "Congratulations! Your order has been submitted.<br/>Please wait for a phone call to confirm your order.<br/>Thank you for choosing BRGR: The Burger Project!";
 					
 				//Reset number of tray contents, subtotal, & tray
 				$_SESSION["traycontents"] = 0;
@@ -163,7 +163,7 @@
 		if($_SESSION["id"]!=null){
 			$password = md5($_POST["password"]);
 			if($password!=$pw){
-				$error = "Wrong password";
+				$error = "* Wrong password";
 				$showform1 = false;
 				$showform2 = false;
 				$showform3 = true;
@@ -172,7 +172,7 @@
 				$showform1 = false;
 				$showform2 = false;
 				$showform3 = false;
-				$msg = "Congratulations!";
+				$msg = "Congratulations! Your order has been submitted.<br/>Please wait for a phone call to confirm your order.<br/>Thank you for choosing BRGR: The Burger Project!";
 				//Reset number of tray contents, subtotal, & tray
 				$_SESSION["traycontents"] = 0;
 				$_SESSION["subtotal"] = 0;
@@ -193,7 +193,7 @@
 				$showform1 = false;
 				$showform2 = false;
 				$showform3 = false;
-				$msg = "Congratulations!";
+				$msg = "Congratulations! Your order has been submitted.<br/>Please wait for a phone call to confirm your order.<br/>Thank you for choosing BRGR: The Burger Project!";
 				//Reset number of tray contents, subtotal, & tray
 				$_SESSION["traycontents"] = 0;
 				$_SESSION["subtotal"] = 0;
@@ -252,10 +252,12 @@
 				
 			</div>
 			
-			<br/><br/><br/>
+			<br/>
 			
 			<?php if($showform1) { ?>
-			<table class="traytable" cellspacing="0" cellpadding="0">
+			
+			<h2>Checkout: Tray Contents & Payment</h2>
+			<table class="traytable">
 					<tr class="th">
 						<td><b>Product Name</b></td>
 						<td><b>Quantity</b></td>
@@ -281,31 +283,32 @@
 				<!-- Subtotal -->
 				<tr class="th">
 					<td id="empty"></td>
-					<td><b>Subtotal</b></td>
-					<td><?php  echo $_SESSION["subtotal"]; ?></td>
+					<td style="text-align: right; padding-right: 10px;"><b>Subtotal</b></td>
+					<td style="background-color: e1e1e1; padding: 5px; width: 50px;" ><?php  echo $_SESSION["subtotal"]; ?></td>
 				</tr>
 			</table>
-			
+			<br/>
 			<form name="checkoutform" action="checkout.php" method="POST">
-					Prepare change for <input type="number" min="0" name="payment" value="<?php echo $payment; ?>"/> 
+					<b>Prepare change for</b> <input type="number" min="0" name="payment" value="<?php echo $payment; ?>"/> 
 					<input type="submit" name="submit1" value="Submit"/><br/>
-					<?php if($error!='') echo $error; ?>
+					<?php if($error!='') echo '<text class="error">'.$error.'</text>'; ?>
 			</form>
 			<?php } ?>
 			
 			
 			<?php if($showform2) { ?>
+			<h2>Checkout: Delivery Address</h2>
 			<form name="checkoutform2" action="checkout.php" method="POST">
 				<table class="editformtable">
 					<tr><td class="title">Floor/Dept/House no</td><td><input type="text" name="floor" placeholder="Floor/Dept/House no" value="<?php echo $floor; ?>" /></td></tr>
 					<tr><td class="title">Building</td><td><input type="text" name="bldg" placeholder="Building" value="<?php echo $bldg; ?>" /></td></tr>
-					<tr><td class="title">Street</td><td><input type="text" name="street" placeholder="Street" value="<?php echo $street; ?>" /></td></tr>
-					<tr><td class="title">Area</td><td><input type="text" name="area" placeholder="Area" value="<?php echo $area; ?>" /></td></tr>
-					<tr><td class="title">City</td><td><input type="text" name="city" placeholder="City" value="<?php echo $city; ?>" /></td></tr>
-					<tr><td class="title">Landmark/s</td><td><input type="text" name="landmark" placeholder="Landmark" value="<?php echo $landmark; ?>" /></td></tr>
+					<tr><td class="title">Street *</td><td><input type="text" name="street" placeholder="Street" value="<?php echo $street; ?>" /></td></tr>
+					<tr><td class="title">Area *</td><td><input type="text" name="area" placeholder="Area" value="<?php echo $area; ?>" /></td></tr>
+					<tr><td class="title">City *</td><td><input type="text" name="city" placeholder="City" value="<?php echo $city; ?>" /></td></tr>
+					<tr><td class="title">Landmark/s *</td><td><input type="text" name="landmark" placeholder="Landmark" value="<?php echo $landmark; ?>" /></td></tr>
 				</table>
 				
-					<?php if($error!='') echo $error.'<br/><br/>'; ?>
+					<?php if($error!='') echo '<br/><text class="error">'.$error.'</text><br/><br/>'; ?>
 				
 					<input type="hidden" name="payment" value="<?php echo $payment; ?>"/>
 					<input type="submit" name="submit2" value="Submit"/>
@@ -313,8 +316,9 @@
 			<?php } ?>
 			
 			<?php if($showform3){ ?>
+			<h2>Checkout: Confirm Customer Details</h2>
 			<form name="checkoutform3" action="checkout.php" method="POST">
-				<table class="traytable" cellspacing="0" cellpadding="0" width="400">
+				<table class="traytable">
 						<tr class="th">
 							<td><b>Product Name</b></td>
 							<td><b>Quantity</b></td>
@@ -333,7 +337,7 @@
 						</tr>
 					<?php
 						}
-					?>					
+					?>
 					<tr><td colspan="3"><br/></td></tr>
 					<tr><td class="title">Floor/Dept/House no</td><td colspan="2"><input type="text" name="floor" disabled="true" value="<?php echo $floor; ?>" /></td></tr>
 					<tr><td class="title">Building</td><td colspan="2"><input type="text" name="bldg" disabled="true" value="<?php echo $bldg; ?>" /></td></tr>
@@ -353,9 +357,9 @@
 					<input type="hidden" name="payment" value="<?php echo $payment; ?>"/>
 					
 					
-					<tr><td>Subtotal</td><td colspan="2"><?php echo $_SESSION["subtotal"]; ?></td></tr>
-					<tr><td>Payment</td><td colspan="2"><?php echo $payment; ?></td></tr>
-					<tr><td>Change</td><td colspan="2"><?php echo $payment - $_SESSION["subtotal"]; ?></td></tr>
+					<tr><td class="title">Subtotal</td><td colspan="2"><?php echo $_SESSION["subtotal"]; ?></td></tr>
+					<tr><td class="title">Payment</td><td colspan="2"><?php echo $payment; ?></td></tr>
+					<tr><td class="title">Change</td><td colspan="2"><?php echo $payment - $_SESSION["subtotal"]; ?></td></tr>
 					
 					<tr><td colspan="3"><br/></td></tr>
 					

@@ -132,40 +132,42 @@
 				?>
 			</div>
 			
-			<br/><br/><br/>
+			<br/>
 			
 			<?php if($viewmember){  ?>
 			
-				<table>
-					<tr><td>Email</td><td><?php echo $email; ?></td></tr>
-					<tr><td>Points</td><td><?php echo $points; ?></td></tr>
-					<tr><td>First name</td><td><?php echo $fname; ?></td></tr>
-					<tr><td>Last name</td><td><?php echo $lname; ?></td></tr>
-					<tr><td>Contact</td><td><?php echo $contact; ?></td></tr>
-					<tr><td>Birthday</td><td><?php echo $bday; ?></td></tr>
-					<tr><td>Gender</td><td><?php echo $gender; ?></td></tr>
-					<tr><td>Floor/Dept/House No</td><td><?php echo $floor; ?></td></tr>
-					<tr><td>Building</td><td><?php echo $bldg; ?></td></tr>
-					<tr><td>Street</td><td><?php echo $street; ?></td></tr>
-					<tr><td>Area</td><td><?php echo $area; ?></td></tr>
-					<tr><td>City</td><td><?php echo $city; ?></td></tr>
-					<tr><td>Landmark</td><td><?php echo $landmark; ?></td></tr>
-					<tr><td>Floor/Dept/House No</td><td><?php echo $floor2; ?></td></tr>
-					<tr><td>Building</td><td><?php echo $bldg2; ?></td></tr>
-					<tr><td>Street</td><td><?php echo $street2; ?></td></tr>
-					<tr><td>Area</td><td><?php echo $area2; ?></td></tr>
-					<tr><td>City</td><td><?php echo $city2; ?></td></tr>
-					<tr><td>Landmark</td><td><?php echo $landmark2; ?></td></tr>
+				<h2>Viewing information for <?php echo $fname.' '.$lname; ?></h2>
+			
+				<table class="viewtable">
+					<tr><td class="viewtitle">Email</td><td><?php echo $email; ?></td></tr>
+					<tr><td class="viewtitle">Points</td><td><?php echo $points; ?></td></tr>
+					<tr><td class="viewtitle">First name</td><td><?php echo $fname; ?></td></tr>
+					<tr><td class="viewtitle">Last name</td><td><?php echo $lname; ?></td></tr>
+					<tr><td class="viewtitle">Contact</td><td><?php echo $contact; ?></td></tr>
+					<tr><td class="viewtitle">Birthday</td><td><?php echo $bday; ?></td></tr>
+					<tr><td class="viewtitle">Gender</td><td><?php echo $gender; ?></td></tr>
+					<tr><td class="viewtitle">Floor/Dept/House No</td><td><?php echo $floor; ?></td></tr>
+					<tr><td class="viewtitle">Building</td><td><?php echo $bldg; ?></td></tr>
+					<tr><td class="viewtitle">Street</td><td><?php echo $street; ?></td></tr>
+					<tr><td class="viewtitle">Area</td><td><?php echo $area; ?></td></tr>
+					<tr><td class="viewtitle">City</td><td><?php echo $city; ?></td></tr>
+					<tr><td class="viewtitle">Landmark</td><td><?php echo $landmark; ?></td></tr>
+					<tr><td class="viewtitle">Floor/Dept/House No</td><td><?php echo $floor2; ?></td></tr>
+					<tr><td class="viewtitle">Building</td><td><?php echo $bldg2; ?></td></tr>
+					<tr><td class="viewtitle">Street</td><td><?php echo $street2; ?></td></tr>
+					<tr><td class="viewtitle">Area</td><td><?php echo $area2; ?></td></tr>
+					<tr><td class="viewtitle">City</td><td><?php echo $city2; ?></td></tr>
+					<tr><td class="viewtitle">Landmark</td><td><?php echo $landmark2; ?></td></tr>
 				</table>
 			
-				<br/><br/><br/>
+				<br/>
 			
 			<?php } ?>
 			
-			<?php if($update) echo "<b>MEMBERS LIST UPDATED</b><br/><br/>"; ?>
+			<?php if($update) echo '<text class="error">MEMBERS LIST UPDATED</text><br/><br/>'; ?>
 			
 			<!--MEMBERS LIST-->
-			Members List<br/><br/>
+			<h2>List of Members</h2>
 			
 			<table class="prodtable">
 			<form name="memberform" action="member.php" method="POST">
@@ -187,6 +189,8 @@
 			?>
 			</form>
 			</table>
+			
+			<br/>
 			
 		</div>
 	
