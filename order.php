@@ -57,7 +57,7 @@
 			$num_items = $row[6];
 			$subtotal = $row[7];
 			$cash = $row[8];
-			$status = $row[9];
+			$status = $row[10];
 						
 			$vieworder = true;
 		}
@@ -152,7 +152,7 @@
 				$result = pg_query($dbconn, $query) or die('Query failed: ' . pg_last_error());
 				while($row=pg_fetch_row($result)){
 					echo '<tr>';
-					echo '<td><b>Order #'.$row[0].'</b><br/>Date created:'.$row[2].'<br/>Status:'.$row[9].'<br/>Ordered by:'.$row[4].'</td>';
+					echo '<td><b>Order #'.$row[0].'</b><br/>Date created:'.$row[2].'<br/>Status:'.$row[10].'<br/>Ordered by:'.$row[4].'</td>';
 					$temp = str_replace(".","",$row[0]);
 					echo '<td><input type="submit" name="view'.$temp.'" value="View"/><br/>';
 					echo '<input type="submit" name="clear'.$temp.'" value="Clear"/></td>';
